@@ -1,9 +1,76 @@
 {
   "name": "sos-portal-components-react",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Shared portal UI for base components",
   "license": "Apache-2.0",
-  "type": "module"
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./subject-conversation-chat": {
+      "types": "./dist/SubjectConversationChat.d.ts",
+      "default": "./dist/SubjectConversationChat.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm test && npm run build",
+    "prepack": "npm run check"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "peerDependencies": {
+    "@kesha-antonov/react-native-chat": "^6.0.1",
+    "react": ">=18.3.0",
+    "react-dom": ">=18.3.0",
+    "react-native": ">=0.82.0",
+    "react-native-gesture-handler": ">=3.0.0",
+    "react-native-keyboard-controller": ">=1.0.0",
+    "react-native-reanimated": ">=3.0.0",
+    "react-native-safe-area-context": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@kesha-antonov/react-native-chat": { "optional": true },
+    "react-native": { "optional": true },
+    "react-native-gesture-handler": { "optional": true },
+    "react-native-keyboard-controller": { "optional": true },
+    "react-native-reanimated": { "optional": true },
+    "react-native-safe-area-context": { "optional": true }
+  },
+  "dependencies": {
+    "antifraud-portal-components-react": "0.2.2",
+    "sos-data-utils-ts": "0.6.25"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "22.19.15",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "jsdom": "26.1.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "typescript": "5.9.3",
+    "vitest": "4.1.12"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soschain/sos-portal-components-react.git"
+  }
 }
 

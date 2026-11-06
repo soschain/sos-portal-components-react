@@ -33,6 +33,19 @@ Browser state, a visible tab or a selected role never grants authority. Every
 protected action is enabled from trusted host capabilities and remains
 revalidated by the BFF/Gateway.
 
+## Implemented exports
+
+- `sos-portal-components-react/subject-conversation-chat` provides the
+  canonical React Native/Web adapter for an already-authorized subject
+  conversation. It projects the stable SOS entry model into the neutral
+  Antifraud conversation surface backed by
+  `@kesha-antonov/react-native-chat`. Hosts retain BFF delivery, attachment
+  opening, FHIR rendering, WebRTC signaling and authorization.
+
+The compatibility export currently present in the human-health component
+package is deprecated and will delegate to this package while consumers move
+to the SOS-owned path.
+
 ## Tuskr use-case catalogue
 
 The stable IDs below are intended to become Tuskr cases. Each case must be
