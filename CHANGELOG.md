@@ -5,7 +5,7 @@
 ## 0.2.1 - 2026-11-07
 
 - Pin `sos-data-utils-ts@0.6.28`, the exact release that owns the portal RTC
-  Communication contract consumed by `LiveKitRealtimeCallClient`. Clean npm
+  Communication contract consumed by `createLiveKitRealtimeCallClient`. Clean npm
   installs no longer retain a nested pre-RTC data-utils release.
 
 ## 0.2.0 - 2026-11-07
@@ -18,7 +18,7 @@
   canonical Communications. It projects text, governed attachments, clinical
   Bundles, ICS/files, audio and call events without owning persistence,
   signaling or recipient authority.
-- Export `LiveKitRealtimeCallClient` as a dynamically loaded web RTC adapter
+- Export `createLiveKitRealtimeCallClient` as a dynamically loaded web RTC adapter
   designed for later Expo substitution. It consumes only the short grant
   issued by the BFF and never receives LiveKit API credentials.
 - Separate CH all-local, telephone-assistant, optional web-assistant and RTC
