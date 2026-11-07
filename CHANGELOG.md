@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.1.1 - 2026-11-06
+
+- Document the GitHub organization handoff, BFF-validated synthetic Demo
+  boundary, scoped storage contract and two-browser call verification flow.
+
 ## 0.1.0 - 2026-11-06
 
 - Establish the shared cross-sector portal-component boundary.

@@ -6,6 +6,9 @@ health, animal care, public safety, emergency response and other configured
 sectors. The package exists to prevent each sector flavour from reimplementing
 the same shell, access journey, card navigation and governed subject workflows.
 
+The current repository and Demo-boundary handoff is summarized in
+[`docs/DEVELOPER_UPDATE_2026-11-06.md`](docs/DEVELOPER_UPDATE_2026-11-06.md).
+
 The first implementation of a workflow may be proven in the animal-care
 portals. That does not make every future human-health consumer depend
 permanently on an animal-care component. Promotion into this package happens
