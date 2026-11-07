@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.2.1 - 2026-11-07
+
+- Pin `sos-data-utils-ts@0.6.28`, the exact release that owns the portal RTC
+  Communication contract consumed by `LiveKitRealtimeCallClient`. Clean npm
+  installs no longer retain a nested pre-RTC data-utils release.
+
 ## 0.2.0 - 2026-11-07
 
 - Establish this package as the shared presentation boundary consumed directly
