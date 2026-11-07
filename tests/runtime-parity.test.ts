@@ -10,7 +10,7 @@ describe('shared UI runtime parity', () => {
       'README.md',
       'AGENTS.md',
       '.codex/skills/preserve-demo-test-network-adapter-parity/SKILL.md',
-      'docs/DEVELOPER_UPDATE_2026-11-06.md',
+      'docs/01-PORTAL_MODES_AND_AUTH.md',
     ].map(path => readFileSync(join(root, path), 'utf8')).join('\n')
     expect(contract).toMatch(/same use-case state.*Demo.*Test Network.*Expo/is)
     expect(contract).toMatch(/never.*(select|import).*persistence/is)

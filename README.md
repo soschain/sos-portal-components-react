@@ -1,5 +1,24 @@
 # SOS Portal Components React
 
+## Numbered engineering guides
+
+1. [00 — Documentation index](docs/00-INDEX.md)
+2. [01 — Portal modes, authentication and authority](docs/01-PORTAL_MODES_AND_AUTH.md)
+3. [02 — Cross-portal Tuskr cases](docs/02-CROSS_PORTAL_TUSKR_CASES.md)
+
+Read these with the owning CH application's README for runnable commands and
+flavour configuration. The cases below retain their stable IDs; the numbered
+guides supply cross-portal steps, expected results and negative checks.
+
+Start dependencies by use case: local Demo UI/BFF uses the memory vault and
+no GW; clinical coding/cache cases add Terminology through its SDK, and call
+cases add LiveKit independently. Network cases progress from GW memory/test
+to local Fabric, then the chosen online `dev:staging` Test Network flavours.
+Demo stays BFF-only throughout. See the
+[dependency table](docs/01-PORTAL_MODES_AND_AUTH.md#11-start-dependencies-for-the-case-being-tested).
+Rerun the smallest failed/affected gate while retaining valid green evidence;
+release closure still requires every affected boundary.
+
 ## Runtime parity
 
 These components render the same use-case state in Demo, Test Network, web and
@@ -18,8 +37,11 @@ health, animal care, public safety, emergency response and other configured
 sectors. The package exists to prevent each sector flavour from reimplementing
 the same shell, access journey, card navigation and governed subject workflows.
 
-The current repository and Demo-boundary handoff is summarized in
-[`docs/DEVELOPER_UPDATE_2026-11-06.md`](docs/DEVELOPER_UPDATE_2026-11-06.md).
+Public Demo authenticates a real email account and uses BFF-validated synthetic
+profiles. Fixed Firebase test-phone codes belong only to tests in ignored
+configuration, never public Demo access. Demo business state stays behind the
+BFF Confidential Storage boundary; Test Network separately proves the complete
+organization/employee/subject lifecycle through its real authority and GW.
 
 The first implementation of a workflow may be proven in the animal-care
 portals. That does not make every future human-health consumer depend
@@ -67,6 +89,11 @@ The stable IDs below are intended to become Tuskr cases. Each case must be
 executed for every applicable flavour, actor, viewport and environment. Demo
 uses synthetic state and must say so; Test Network and Production must use
 their real authorized BFF path.
+
+Use [02 — Cross-portal Tuskr cases](docs/02-CROSS_PORTAL_TUSKR_CASES.md)
+for Personal ↔ Professional prerequisites, numbered actions, both-side
+readback, rejected access, reset/revocation and execution evidence. A documented
+case is an acceptance target, not an end-to-end pass claim.
 
 | ID | Area | Governed journey and acceptance target |
 |---|---|---|

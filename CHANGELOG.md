@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Replace the dated developer handoff with numbered, README-linked guides for
+  generic portal modes/authentication and detailed cross-portal Tuskr cases.
+  Preserve the existing `SOS-PORTAL-001`–`029` and specialist research IDs.
+- Distinguish public Demo real-email account login from fixed Firebase test
+  phone fixtures, BFF-owned Demo persistence from Test Network authority/GW
+  lifecycle, and dedicated RTC media from Communication history and assistants.
+- Document positive/negative Personal ↔ Professional journeys, both-side
+  readback, profile/relationship revocation, sector variants and evidence
+  boundaries without claiming unexecuted gates have passed.
+- Specify dependency-by-case progression: BFF/memory Demo first, independent
+  terminology-cache and RTC additions, and memory-GW -> local Fabric ->
+  online Test Network acceptance for network cases. Retain green evidence and
+  rerun only failed/affected gates while closing the cumulative release set.
+
 ## 0.2.3 - 2026-11-07
 
 - Render caller-cancelled Communications as `Cancelled`/`Cancelada` rather
