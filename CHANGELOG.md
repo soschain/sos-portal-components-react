@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Document and enforce one shared UI contract for Demo, Test Network, web and
+  Expo; presentation components never select a persistence adapter.
+
 ## 0.1.1 - 2026-11-06
 
 - Document the GitHub organization handoff, BFF-validated synthetic Demo
