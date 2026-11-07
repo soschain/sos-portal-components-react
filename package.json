@@ -34,6 +34,7 @@
   },
   "peerDependencies": {
     "@kesha-antonov/react-native-chat": "^6.0.1",
+    "livekit-client": ">=2.23.0 <3",
     "react": ">=18.3.0",
     "react-dom": ">=18.3.0",
     "react-native": ">=0.82.0",
@@ -43,12 +44,27 @@
     "react-native-safe-area-context": ">=5.0.0"
   },
   "peerDependenciesMeta": {
-    "@kesha-antonov/react-native-chat": { "optional": true },
-    "react-native": { "optional": true },
-    "react-native-gesture-handler": { "optional": true },
-    "react-native-keyboard-controller": { "optional": true },
-    "react-native-reanimated": { "optional": true },
-    "react-native-safe-area-context": { "optional": true }
+    "@kesha-antonov/react-native-chat": {
+      "optional": true
+    },
+    "livekit-client": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-gesture-handler": {
+      "optional": true
+    },
+    "react-native-keyboard-controller": {
+      "optional": true
+    },
+    "react-native-reanimated": {
+      "optional": true
+    },
+    "react-native-safe-area-context": {
+      "optional": true
+    }
   },
   "dependencies": {
     "antifraud-portal-components-react": "0.2.2",
@@ -60,6 +76,7 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "jsdom": "26.1.0",
+    "livekit-client": "2.23.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "typescript": "5.9.3",
@@ -73,4 +90,3 @@
     "url": "git+https://github.com/soschain/sos-portal-components-react.git"
   }
 }
-

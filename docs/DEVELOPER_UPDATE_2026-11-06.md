@@ -22,15 +22,20 @@ Pull the latest `main` branches before continuing Connect Health work.
 - The portal BFF validates the synthetic Demo tenant, organization, sector,
   role and PIN against the shared Demo catalogue. Use the term
   **BFF-validated Demo selection**.
-- This selection grants no employment, licence, membership, Gateway or
-  professional authority. Demo does not use the Gateway.
-- Personal workspaces, generated card locators, call signaling and inbox
-  projections use the shared `demo-v1` storage namespace. Production is
+- This selection grants no employment, licence, membership or professional
+  authority. Demo still executes the normal BFF -> SDK -> GW use cases with
+  the all-local GW memory adapter.
+- Personal workspaces, generated card locators and inbox projections use the
+  shared `demo-v1` storage namespace. Production is
   rejected and Live/Test Network collections are never used as a fallback.
 - Ending an unanswered call projects `missed`; ending an accepted call
   projects `completed` in Communications.
 
-## Two-browser verification
+## Two-browser RTC integration verification
+
+This is a separate RTC integration profile. It is not the CH all-local portal
+gate and it does not start or use `sos-chat`, the telephone assistant or the
+optional web assistant.
 
 1. Sign in to the Personal Demo, unlock it with a Demo PIN and copy one
    generated card number.
@@ -54,10 +59,12 @@ authority paths and must not reuse this synthetic Demo boundary.
 - The two staging-profile commands reuse one Firestore emulator on `:4325` and
   keep separate Next build directories, so all four portal processes can run
   together.
-- The all-local journey uses memory behind the same Confidential Storage port
-  in the CH BFFs and GW. Chat on `:3400` also uses memory, but only for
-  transient delivery, active-call and WebRTC signaling state. PostgreSQL,
-  Firestore and IPFS are not required for all-local.
+- The CH all-local portal journey uses memory behind the same Confidential
+  Storage port in the BFFs and GW. It does not require Chat or either assistant.
+  PostgreSQL, Firestore and IPFS are not required.
+- The distinct RTC integration profile starts its dedicated RTC provider and
+  proves two browsers. Call invitations, terminal states and optional
+  unanswered audio are Communications; media is not persisted in Chat.
 - A UI-only browser-to-browser call is diagnostic. The release journey starts
   GW with `networkKind=test` and proves canonical Communication readback.
   ICA is required only for authority admission and Terminology only for coded
