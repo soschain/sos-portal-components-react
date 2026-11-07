@@ -44,3 +44,20 @@ Pull the latest `main` branches before continuing Connect Health work.
 
 Test Network and Production keep their normal Gateway/identity/credential
 authority paths and must not reuse this synthetic Demo boundary.
+
+## Windows local topology
+
+- Personal all-local uses `http://localhost:4337`; Professional all-local uses
+  `http://localhost:4338`.
+- Personal `dev:staging:soschain` uses `http://localhost:4317`; Professional
+  `dev:staging:soschain` uses `http://localhost:4318`.
+- The two staging-profile commands reuse one Firestore emulator on `:4325` and
+  keep separate Next build directories, so all four portal processes can run
+  together.
+- The all-local call journey uses one shared Chat process on `:3400` with its
+  in-memory storage adapter. PostgreSQL and IPFS are not required for this
+  browser-to-browser functional test.
+- Demo calling does not require GW, ICA or Terminology. Start the shared local
+  GW/ICA for Test Network authority journeys and Terminology when exercising
+  coded clinical authoring; an already persisted Bundle can be viewed without
+  a local terminology database.
