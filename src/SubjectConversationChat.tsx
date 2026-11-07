@@ -53,8 +53,13 @@ export function SubjectConversationChat({
   composerEnabled?: boolean
 }>) {
   const messages = useMemo(
-    () => [...projectSubjectConversationChatMessages(entries)] as SubjectConversationIMessage[],
-    [entries],
+    () => [...projectSubjectConversationChatMessages(entries)].map(message => {
+      const content = message.subjectConversation.content
+      if (content.kind !== SubjectConversationContentKind.Call) return message
+      const status = callStateLabel(content.state, locale)
+      return { ...message, text: `${content.label} · ${status}` }
+    }) as SubjectConversationIMessage[],
+    [entries, locale],
   )
   const user = useMemo(() => ({
     _id: currentUser.id,
@@ -78,4 +83,11 @@ export function SubjectConversationChat({
     {...(copy ? { copy } : {})}
     {...(composerEnabled !== undefined ? { composerEnabled } : {})}
   />
+}
+
+function callStateLabel(state: 'ringing' | 'received' | 'missed' | 'completed' | 'declined' | 'ended', locale?: string): string {
+  const labels = locale === 'es'
+    ? { ringing: 'Sonando', received: 'Recibida', missed: 'Perdida', completed: 'Completada', declined: 'Rechazada', ended: 'Finalizada' }
+    : { ringing: 'Ringing', received: 'Received', missed: 'Missed', completed: 'Completed', declined: 'Declined', ended: 'Ended' }
+  return labels[state]
 }

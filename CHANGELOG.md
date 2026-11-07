@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.2.2 - 2026-11-07
+
+- Render the canonical ringing, missed and ended state beside every call
+  Communication in the shared Personal/Professional conversation surface.
+  Host portals no longer need divergent status labels to expose call history.
+
 ## 0.2.1 - 2026-11-07
 
 - Pin `sos-data-utils-ts@0.6.28`, the exact release that owns the portal RTC
