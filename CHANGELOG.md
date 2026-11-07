@@ -4,6 +4,17 @@
 
 ## 0.2.0 - 2026-11-07
 
+- Establish this package as the shared presentation boundary consumed directly
+  by CH Personal and Professional in every flavour. Product portals provide
+  authorization, policy and BFF adapters; UHC compatibility exports no longer
+  own the active implementation.
+- Export `SubjectConversationChat` as the single subject-channel renderer over
+  canonical Communications. It projects text, governed attachments, clinical
+  Bundles, ICS/files, audio and call events without owning persistence,
+  signaling or recipient authority.
+- Export `LiveKitRealtimeCallClient` as a dynamically loaded web RTC adapter
+  designed for later Expo substitution. It consumes only the short grant
+  issued by the BFF and never receives LiveKit API credentials.
 - Separate CH all-local, telephone-assistant, optional web-assistant and RTC
   integration profiles. Calls use a host-injected dedicated RTC client while
   invitations, terminal events and unanswered audio render as Communications.
