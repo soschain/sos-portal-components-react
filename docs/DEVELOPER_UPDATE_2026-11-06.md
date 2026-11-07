@@ -54,10 +54,14 @@ authority paths and must not reuse this synthetic Demo boundary.
 - The two staging-profile commands reuse one Firestore emulator on `:4325` and
   keep separate Next build directories, so all four portal processes can run
   together.
-- The all-local call journey uses one shared Chat process on `:3400` with its
-  in-memory storage adapter. PostgreSQL and IPFS are not required for this
-  browser-to-browser functional test.
-- Demo calling does not require GW, ICA or Terminology. Start the shared local
+- The all-local journey uses memory behind the same Confidential Storage port
+  in the CH BFFs and GW. Chat on `:3400` also uses memory, but only for
+  transient delivery, active-call and WebRTC signaling state. PostgreSQL,
+  Firestore and IPFS are not required for all-local.
+- A UI-only browser-to-browser call is diagnostic. The release journey starts
+  GW with `networkKind=test` and proves canonical Communication readback.
+  ICA is required only for authority admission and Terminology only for coded
+  clinical authoring. Start the shared local
   GW/ICA for Test Network authority journeys and Terminology when exercising
   coded clinical authoring; an already persisted Bundle can be viewed without
   a local terminology database.

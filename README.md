@@ -1,5 +1,12 @@
 # SOS Portal Components React
 
+## Runtime parity
+
+These components render the same use-case state in Demo, Test Network, web and
+Expo. They never select storage. Owning applications inject memory for
+all-local, Expo SQLite for native, or an explicit durable adapter. Firestore
+must not create a Demo-only component or data model.
+
 Shared portal UI for base components. It provides the portal UI core for
 personal and professional applications across human
 health, animal care, public safety, emergency response and other configured
