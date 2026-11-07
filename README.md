@@ -7,6 +7,11 @@ Expo. They never select storage. Owning applications inject memory for
 all-local, Expo SQLite for native, or an explicit durable adapter. Firestore
 must not create a Demo-only component or data model.
 
+CH all-local portal execution does not start or require Chat, the telephone
+assistant or the optional web assistant. Realtime audio/video is a dedicated
+RTC boundary supplied by the host BFF. Invitations, terminal states and an
+optional unanswered audio attachment are rendered from Communications.
+
 Shared portal UI for base components. It provides the portal UI core for
 personal and professional applications across human
 health, animal care, public safety, emergency response and other configured

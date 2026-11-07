@@ -10,9 +10,13 @@ describe('shared UI runtime parity', () => {
       'README.md',
       'AGENTS.md',
       '.codex/skills/preserve-demo-test-network-adapter-parity/SKILL.md',
+      'docs/DEVELOPER_UPDATE_2026-11-06.md',
     ].map(path => readFileSync(join(root, path), 'utf8')).join('\n')
     expect(contract).toMatch(/same use-case state.*Demo.*Test Network.*Expo/is)
     expect(contract).toMatch(/never.*(select|import).*persistence/is)
     expect(contract).toMatch(/Expo SQLite/is)
+    expect(contract).toMatch(/all-local[\s\S]*does not[\s\S]*(start|require)[\s\S]*Chat/is)
+    expect(contract).toMatch(/dedicated RTC/is)
+    expect(contract).toMatch(/unanswered audio[\s\S]*Communication/is)
   })
 })

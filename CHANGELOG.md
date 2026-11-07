@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Separate CH all-local, telephone-assistant, optional web-assistant and RTC
+  integration profiles. Calls use a host-injected dedicated RTC client while
+  invitations, terminal events and unanswered audio render as Communications.
+
 ## 0.1.2 - 2026-11-07
 
 - Document and enforce one shared UI contract for Demo, Test Network, web and
