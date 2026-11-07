@@ -85,9 +85,9 @@ export function SubjectConversationChat({
   />
 }
 
-function callStateLabel(state: 'ringing' | 'received' | 'missed' | 'completed' | 'declined' | 'ended', locale?: string): string {
+function callStateLabel(state: 'ringing' | 'received' | 'missed' | 'completed' | 'declined' | 'cancelled' | 'ended', locale?: string): string {
   const labels = locale === 'es'
-    ? { ringing: 'Sonando', received: 'Recibida', missed: 'Perdida', completed: 'Completada', declined: 'Rechazada', ended: 'Finalizada' }
-    : { ringing: 'Ringing', received: 'Received', missed: 'Missed', completed: 'Completed', declined: 'Declined', ended: 'Ended' }
+    ? { ringing: 'Sonando', received: 'Recibida', missed: 'Perdida', completed: 'Completada', declined: 'Rechazada', cancelled: 'Cancelada', ended: 'Finalizada' }
+    : { ringing: 'Ringing', received: 'Received', missed: 'Missed', completed: 'Completed', declined: 'Declined', cancelled: 'Cancelled', ended: 'Ended' }
   return labels[state]
 }

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.2.3 - 2026-11-07
+
+- Render caller-cancelled Communications as `Cancelled`/`Cancelada` rather
+  than collapsing them into an undefined or generic ended state.
+- Let the host distinguish a caller cancellation from an unanswered timeout
+  when ending an RTC session; media teardown remains separate from canonical
+  Communication persistence.
+
 ## 0.2.2 - 2026-11-07
 
 - Render the canonical ringing, missed and ended state beside every call

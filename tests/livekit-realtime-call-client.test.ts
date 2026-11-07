@@ -19,8 +19,10 @@ describe('dedicated LiveKit realtime call client', () => {
     const session = await client.start({ conversation: { subjectDid: 'did:web:subject.example' }, media: ['audio', 'video'] })
     expect(room.connect).toHaveBeenCalledWith('wss://rtc.example', 'opaque-token')
     expect(remoteStream.addTrack).toHaveBeenCalledWith(remoteTrack)
-    await session.end()
-    expect(endCall).toHaveBeenCalledWith({ conversation: { subjectDid: 'did:web:subject.example' }, callId: 'call-1' })
+    expect(session.answered).toBeInstanceOf(Promise)
+    await session.answered
+    await session.end('missed')
+    expect(endCall).toHaveBeenCalledWith({ conversation: { subjectDid: 'did:web:subject.example' }, callId: 'call-1', outcome: 'missed' })
     expect(JSON.stringify(issueSession.mock.calls)).not.toMatch(/chat|assistant/i)
   })
 })

@@ -22,13 +22,14 @@ import { SubjectConversationChat } from '../src/SubjectConversationChat.js'
 afterEach(() => { cleanup(); capture.mockClear() })
 
 describe('SubjectConversationChat', () => {
-  it('projects text, FHIR documents and missed calls without taking host authority', () => {
+  it('projects text, FHIR documents and distinct missed/cancelled calls without taking host authority', () => {
     const sent: string[] = []
     render(<SubjectConversationChat
       entries={[
         { id: 'text-1', createdAt: '2026-11-06T10:00:00.000Z', direction: 'incoming', sender: { id: 'PractitionerRole/one', name: 'Clinic' }, content: { kind: 'text', text: 'Vaccination confirmed.' } },
         { id: 'document-1', createdAt: '2026-11-06T10:01:00.000Z', direction: 'incoming', sender: { id: 'PractitionerRole/one', name: 'Clinic' }, content: { kind: 'fhir-document', label: 'Vaccination Bundle', bundle: { resourceType: 'Bundle', type: 'document' } } },
         { id: 'call-1', createdAt: '2026-11-06T10:02:00.000Z', direction: 'incoming', sender: { id: 'PractitionerRole/one', name: 'Clinic' }, content: { kind: 'call', media: 'video', state: 'missed', label: 'Video call' } },
+        { id: 'call-2', createdAt: '2026-11-06T10:03:00.000Z', direction: 'incoming', sender: { id: 'PractitionerRole/one', name: 'Clinic' }, content: { kind: 'call', media: 'video', state: 'cancelled', label: 'Video call' } },
       ]}
       currentUser={{ id: 'Patient/self', name: 'Me' }}
       onSendText={text => { sent.push(text) }}
@@ -38,6 +39,7 @@ describe('SubjectConversationChat', () => {
 
     expect(screen.getByTestId('react-native-chat')).toBeTruthy()
     expect(screen.getByText('Video call · Missed')).toBeTruthy()
+    expect(screen.getByText('Video call · Cancelled')).toBeTruthy()
     expect(screen.getByText('FHIR renderer: Vaccination Bundle')).toBeTruthy()
     expect(capture.mock.calls[0]![0].messages[0].system).toBe(true)
     fireEvent.click(screen.getByRole('button', { name: 'Mock send' }))
