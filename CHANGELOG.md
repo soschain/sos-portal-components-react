@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.2 - 2026-11-07
+
 - Document and enforce one shared UI contract for Demo, Test Network, web and
   Expo; presentation components never select a persistence adapter.
 
