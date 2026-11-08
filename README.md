@@ -21,8 +21,10 @@ release closure still requires every affected boundary.
 
 ## Runtime parity
 
-These components render the same use-case state in Demo, Test Network, web and
-Expo. They never select storage. Owning applications inject memory for
+Components share use-case state between Demo and Test Network. Native support
+is export-specific: conversation uses the React Native/Web adapter; the device
+preferences renderer currently uses web DOM. A native preferences renderer
+remains future work. Components never select storage. Applications inject memory for
 all-local, Expo SQLite for native, or an explicit durable adapter. Firestore
 must not create a Demo-only component or data model.
 
@@ -71,6 +73,15 @@ protected action is enabled from trusted host capabilities and remains
 revalidated by the BFF/Gateway.
 
 ## Implemented exports
+
+- `sos-portal-components-react/device-assistance-preferences` reexports the
+  controlled `DeviceAssistancePreferences` owned by the neutral Antifraud
+  package. Import `antifraud-portal-components-react/device-assistance-preferences.css`
+  once in the application shell. It separates consent, runtime availability
+  and explicit preparation; hosts supply localized labels, storage and runtime
+  adapters. Rendering/toggling does not prepare a model or grant subject access.
+  Use this independent entry on account pages to avoid loading conversation
+  and RTC modules. Do not fork another device preferences panel per flavour.
 
 - `sos-portal-components-react/subject-conversation-chat` provides the
   canonical React Native/Web adapter for an already-authorized subject

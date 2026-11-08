@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.3.0 - 2026-11-08
+
+- Export shared device-assistance preferences through an independent SOS entry,
+  delegating its controlled web renderer to Antifraud 0.3.0. Keep runtime,
+  capability detection, storage and authorization in the owning application.
+  Native preferences rendering is not implemented by this release.
+- Typecheck, build and the independent export smoke pass. Cross-application
+  phone-authenticated browser checks belong to the CH acceptance evidence.
+
 - Specify shared subject-control placement, semantic option/action colours,
   account-menu versus subject-device grants, appearance namespace parity and
   separate model enablement/availability/preparation states in the existing

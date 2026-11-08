@@ -1,12 +1,16 @@
 {
   "name": "sos-portal-components-react",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Shared portal UI for base components",
   "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./device-assistance-preferences": {
+      "types": "./dist/DeviceAssistancePreferences.d.ts",
+      "default": "./dist/DeviceAssistancePreferences.js"
+    },
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
@@ -67,7 +71,7 @@
     }
   },
   "dependencies": {
-    "antifraud-portal-components-react": "0.2.2",
+    "antifraud-portal-components-react": "0.3.0",
     "sos-data-utils-ts": "0.6.29"
   },
   "devDependencies": {
