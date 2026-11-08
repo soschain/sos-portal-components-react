@@ -10,6 +10,9 @@
   Native preferences rendering is not implemented by this release.
 - Typecheck, build and the independent export smoke pass. Cross-application
   phone-authenticated browser checks belong to the CH acceptance evidence.
+- List the three implemented runtime exports separately from the acceptance
+  catalogue. Base shell/profile/card extraction from the existing domain
+  package remains pending; controller administration has a separate owner.
 
 - Specify shared subject-control placement, semantic option/action colours,
   account-menu versus subject-device grants, appearance namespace parity and

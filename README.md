@@ -74,6 +74,23 @@ revalidated by the BFF/Gateway.
 
 ## Implemented exports
 
+This is the current runtime inventory, not completion of the whole catalogue:
+
+| Export | Owner / responsibility |
+| --- | --- |
+| `SubjectConversationChat` | SOS projection of authorized subject Communications into the neutral Antifraud conversation renderer. |
+| `createLiveKitRealtimeCallClient` | Host-configured RTC client adapter; the BFF retains authorization, credentials and Communication persistence. |
+| `DeviceAssistancePreferences` | Reexport of Antifraud's controlled web preferences renderer. |
+
+The complete base-UI extraction is still pending. `PortalHeader`,
+`PortalSettingsPanel`, profile protection, subject/card navigation and several
+contact, permission and clinical controls remain in
+`uhc-portal-components-react`; application composition also remains in the
+owning portals. Research stays there pending its future owner. The catalogue
+below is acceptance scope and must not be read as an implemented export list.
+Controller administration is owned separately by
+`antifraud-hosting-components-react`.
+
 - `sos-portal-components-react/device-assistance-preferences` reexports the
   controlled `DeviceAssistancePreferences` owned by the neutral Antifraud
   package. Import `antifraud-portal-components-react/device-assistance-preferences.css`
