@@ -42,6 +42,37 @@ and Test Network records or treat one route's login as the other's profile
 grant. Cases below are acceptance specifications, not a claim that they have
 already passed.
 
+### Shared UI placement and device preferences
+
+Apply these checks to `SOS-PORTAL-001` and `026` in every configured flavour,
+Personal/Professional surface and Demo/Test Network variant:
+
+- Primary navigation precedes workspace content. The selected subject's
+  compact summary owns Change card and a collapsed View card. The change
+  control is compact; the initial directory, when no subject is selected,
+  lives below the Cards tab. Do not duplicate the directory above navigation.
+- Account and device Preferences use the same shared person-menu component.
+  Subject-specific telephone-device authorization belongs to that subject's
+  card and requires its independent BFF grant; it is not an account preference.
+- Navigation/selected options are blue, positive mutations green, destructive
+  actions red and warnings amber, independently of branding and network mode.
+- Device preferences distinguish user enablement, runtime availability and
+  model preparation. Show speech-to-text and language-model capabilities,
+  their real status and a disabled reason when unavailable. Do not infer
+  readiness from a checkbox, silently download a model or treat device settings
+  as a microphone permission, subject grant or assistant authorization.
+- Appearance and text size use the same device preference namespace on the
+  menu and Preferences page and survive reload/navigation between modes.
+- Real Management subtabs select a task. Sections inside each selected subtab
+  are independently collapsible; these are distinct levels of navigation.
+
+Health (`SOS-PORTAL-015`, `016` and the clinical variants below) starts with document
+creation for authorized writers and a collapsed IPS. Supported sections open
+the shared section-based editor. Folding a draft retains it; replacing a draft
+with another section's document requires an explicit discard decision.
+These are acceptance requirements, not a declaration that every adapter has
+already implemented model controls or passed its browser variant.
+
 ### 1.1 Dependency preconditions and progression
 
 Use the dependency table in

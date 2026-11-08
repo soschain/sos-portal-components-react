@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Specify shared subject-control placement, semantic option/action colours,
+  account-menu versus subject-device grants, appearance namespace parity and
+  separate model enablement/availability/preparation states in the existing
+  Tuskr cases. These are acceptance requirements, not new runtime readiness.
+
 - Correct the shared acceptance guides to use the selected simulated-phone
   tests without mailbox access. Treat current email-only Organization/employee
   contracts as an implementation gap; preserve official-source verification,
