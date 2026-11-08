@@ -27,10 +27,11 @@ belongs in Tuskr or screenshots.
 Public Demo uses real email account login. Private automated/operator tests
 may use configured Firebase test-phone fixtures from ignored files, including
 Test Network authentication where profile/evidence prerequisites are met.
-Phone authentication does not provide the verified-email claim required by
-the CH Organization/employee endpoints. The online real-email OTP variant
-waits for the operator's owned email and ignored approved mailbox-access
-configuration. Do not add a phone-to-email association feature as a shortcut.
+Phone authentication does not provide the verified-email claim currently
+required by the CH Organization/employee endpoints. The selected automated
+journey uses simulated phones without a mailbox; migrate that email-only
+contract rather than requesting mailbox access or inventing email claims.
+Do not add a phone-to-email association feature as a shortcut.
 A telephone
 does not select a role. A reserved flavour or Expo target is marked
 not executable until its launcher/adapter exists; do not mark an absent
@@ -126,16 +127,16 @@ unshared process-local stores do not satisfy the shared-readback assertion.
 
 IDs: `SOS-PORTAL-005`, `019`, `023`, `028`.
 
-Precondition: the chosen authenticated account supplies the profile evidence
-required by the actual Organization/employee endpoints, including verified
-email. For the online real-email OTP variant the operator supplies the owned
-email and approved mailbox-access configuration in ignored files. Keep the
-full online lifecycle blocked/not executed until those prerequisites are
-resolved. A valid Firebase test-phone session proves authentication, not
-missing email verification or authority. Local Auth-emulator fixtures may
-carry explicit verified-email test claims, but do not prove cloud email
-verification. Do not invent a mailbox service, add an account-association
-feature as a workaround, or count a skipped lifecycle as release evidence.
+Precondition: verified official phone OR email must be checked against the
+exact authoritative source. Current CH Organization/employee endpoints still
+require verified email, which blocks the selected phone-only online journey.
+Keep it unexecuted until that contract is migrated; no mailbox is required
+for this selected test. A valid Firebase test-phone session proves account
+authentication, not organization, employee or subject authority. Local
+Auth-emulator fixtures may carry explicit synthetic verified-email claims to
+isolate an existing policy test, but do not prove cloud email verification or
+the phone-only lifecycle. Do not invent email claims, a mailbox service,
+account-association features or GW/DID changes to hide missing authority.
 
 1. Authenticate the synthetic applicant, protect its controller wallet and
    register the permitted `animal-tech` or `health-tech` organization under
