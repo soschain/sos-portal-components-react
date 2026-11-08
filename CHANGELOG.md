@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Correct the shared acceptance guides to use the selected simulated-phone
+  tests without mailbox access. Treat current email-only Organization/employee
+  contracts as an implementation gap; preserve official-source verification,
+  independent profile authority and existing GW/DID behavior.
+
 - Replace the dated developer handoff with numbered, README-linked guides for
   generic portal modes/authentication and detailed cross-portal Tuskr cases.
   Preserve the existing `SOS-PORTAL-001`–`029` and specialist research IDs.

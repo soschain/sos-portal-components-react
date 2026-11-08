@@ -136,13 +136,16 @@ complete their lifecycle. An isolated local Auth emulator may seed explicit
 verified-email fixture claims for a local network test; that does not prove
 cloud email verification.
 
-The online real-email OTP variant uses an explicitly owned mailbox and waits
-until the operator supplies the real owned email and approved mailbox-access
-configuration in ignored files. Do not invent a mailbox protocol, read
-unrelated mail or add a phone-to-email association feature merely to bypass a
-missing prerequisite. Keep the full online lifecycle unexecuted until its
-chosen account/evidence prerequisites are resolved; a blocked or skipped case
-is not a passed release gate.
+The selected automated acceptance journey uses simulated Firebase phones;
+it does not require an operator mailbox or a phone-to-email association.
+The current email-only Organization/employee contract is an implementation
+gap. Policy must support verified official phone OR email according to the
+authoritative source, without treating a shared organization contact as an
+employee's identity. Do not manufacture email claims, change DID formats or
+alter GW correlation to bypass the gap. Keep that full phone-only lifecycle
+unexecuted until its actual prerequisites are implemented; a blocked or
+skipped case is not a passed release gate. Public Demo account-login policy
+and any independently selected email-OTP test remain separate.
 
 1. Authenticate the applicant with the chosen valid identity/evidence flow and create/unlock its protected controller
    wallet before submitting the organization application.
