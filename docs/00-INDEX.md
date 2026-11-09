@@ -10,7 +10,8 @@ sectors determine policy and permitted specializations.
    persistence, Test Network lifecycle, Confidential Storage and RTC.
 2. [02 — Cross-portal Tuskr cases](02-CROSS_PORTAL_TUSKR_CASES.md) defines
    actor-to-actor journeys, expected readback, negative checks and execution
-   evidence for the stable `SOS-PORTAL-001`–`SOS-PORTAL-029` catalogue.
+   evidence for the stable `SOS-PORTAL-001`–`SOS-PORTAL-029` catalogue. Section
+   15 defines the complete created-card/contact/Encounter/call/handover journey.
 3. [Package README](../README.md) contains the export/ownership map and the
    compact use-case catalogue.
 4. [Changelog](../CHANGELOG.md) records dated changes. Email/Teams updates are

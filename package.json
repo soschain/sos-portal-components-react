@@ -29,7 +29,7 @@
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --maxWorkers=1",
     "check": "npm run typecheck && npm test && npm run build",
     "prepack": "npm run check"
   },
@@ -72,7 +72,7 @@
   },
   "dependencies": {
     "antifraud-portal-components-react": "0.3.0",
-    "sos-data-utils-ts": "0.6.29"
+    "sos-data-utils-ts": "0.6.30"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",

@@ -246,13 +246,20 @@ must not replace asynchronous request/response correlation.
 
 ## 7. Completed audio and video calls
 
+The controller/root-channel RTC case below is a media subcase. Full emergency
+acceptance additionally requires the created-card, recipient and Encounter
+journey in section 15; a preloaded card or an already selected controller
+cannot replace those steps.
+
 IDs: `SOS-PORTAL-010`, `012`, `013`, `029`.
 
 1. Keep the Personal recipient signed in with the selected card open. In the
    other browser use the authorized Professional card/contact action.
 2. Start an audio call; observe the incoming indication and answer in Personal.
 3. Confirm both participants joined the dedicated RTC room and actual media
-   is sent/received. End the call and reload both Communications histories.
+   is sent/received. Hang up on one side only. The other side closes media
+   automatically and both sides release microphone/camera tracks. Reload both
+   Communications histories; do not require a second manual hangup.
 4. Repeat as a video call on desktop/light and mobile/dark.
 
 Expected: BFF-issued grants bind the exact call and participant. Both
@@ -418,3 +425,182 @@ DTOs, hidden storage selectors or duplicate conversation state. Rerun the
 smallest failed gate; rerun a predecessor when its state/boundary changed.
 Legacy compatibility remains separately runnable and never substitutes for
 the active Personal ↔ Professional journey.
+
+## 15. Created household → emergency contact → Encounter → handover
+
+IDs: `SOS-PORTAL-006`, `009`, `010`, `011`, `012`, `013`, `018`, `021`,
+`023`, `029`. Use scenario suffixes on these existing IDs in Tuskr.
+
+This is the complete manual and automated acceptance journey. Its initial
+implementation target is the mixed SOS Personal/Professional pair. Every
+step must use the ordinary visible UI; setup through an API cannot replace a
+user action under test. These are requirements, not execution results.
+
+### 15.1 Create the caller's recipient identity and dependent cards
+
+1. In a fresh/reset Personal Demo, sign in and unlock the profile. The card
+   directory is empty. Choose **Create my card** and complete the human form.
+2. Save, reload and reopen the same card. It is visibly identified as **My
+   card**, including in the card switcher. Only one active `ONESELF`
+   relationship is allowed for this profile; a retry returns the same card.
+3. Create another human card for an authorized dependent, then an animal
+   card. Persist an explicit controller relationship and a separate primary
+   emergency-contact relationship to My card. Show both defaults before save.
+4. Open each new card's Contacts. Add another contact, change priority and
+   remove the initial contact where authorized. Removing a contact does not
+   remove the controller; controller authority does not itself authorize a
+   clinical read or enumerate someone else's private conversation.
+5. Restore My card as the main emergency contact for the following call case.
+   Reload and sign in again; verify the same cards and contact relationships.
+
+Creation of a competent adult's card requires the applicable authority or
+invitation/acceptance; mere possession of their email is insufficient. For an
+animal-only presentation, the human responsible-person identity must remain
+distinct from an animal card; never label an animal `ONESELF`. Define and
+test that presentation before declaring the animal-only variant passed.
+
+### 15.2 Introduce a card to Professional
+
+Personal exposes copyable identifiers/provider/species and a downloadable QR.
+For each applicable row, start from Professional's normal **Introduce card**
+entry and resolve the same dependent card through the authorized BFF:
+
+| Variant | Visible user operation | Required result |
+| --- | --- | --- |
+| Full identifier | Copy the identifier in Personal and paste it in Professional | Resolve its exact card and index provider; request no redundant fields already encoded in that identifier |
+| Manual details | Enter card number, provider code and human/animal choice; select animal species when applicable | Cross-check the complete tuple; human species is supplied by the canonical human profile |
+| Camera QR | Start camera scanning and present Personal's card QR | Decode the supported locator and pass it to the same resolver |
+| Image QR | Download the card QR in Personal and upload that file through Professional's scanner | Decode that actual image and resolve the same card; no hard-coded scan response |
+| Linked identifier | Enter an enabled, governed linked identifier, such as email | Resolve only through the protected provider-discovery/match contract; discovery grants no access |
+
+The network path resolves an opaque index key to its provider and then asks
+that provider under the acting profile. Clear email/phone values never enter
+the ledger. Human cross-provider matching follows the existing PDQm ITI-119
+`Patient/$match` boundary; do not add PIXm or derive clinical authority from a
+match. The provider code and species are routing/identity input, not grants.
+Demo simulates the same use case through its BFF vault without Fabric/GW.
+
+Reject an invalid checksum, wrong provider/species, expired/reset locator,
+ambiguous match, unregistered card, unsupported QR, oversized or invalid
+image, denied camera and unavailable provider with a visible reason. An
+unsupported camera must not disable file upload or pasted-ID entry. Do not
+silently turn an arbitrary DID/number into an imported synthetic card.
+
+### 15.3 Confirm the Encounter and contact the responsible person
+
+1. Before revealing protected contacts or starting a call, Professional shows
+   the resolved subject and the BFF-confirmed organization, department/service,
+   role and existing Encounter or explicit **Start encounter** action.
+   Scanning alone must not silently create an Encounter or grant access.
+2. Start or resume the permitted Encounter. Verify its stable identifier,
+   subject, service and acting professional after reload. Resolve an existing
+   Encounter idempotently; do not create another one on each scan.
+3. Open the subject's authorized emergency contacts. Select the responsible
+   person's My card, now visibly identified as the intended recipient.
+4. Leave Personal signed in with **no card selected**, then repeat while
+   viewing My card, an unrelated card and another workspace section. From
+   Professional start audio, then video in separate runs.
+5. Personal receives an account-level incoming notice in every variant. The
+   recipient need not select, own or control the attended card. Before answer,
+   show the dependent subject, calling organization, department/service, role
+   and Encounter context. Answer and verify real two-way media.
+6. End, reload both portals and reopen the organization/service conversation
+   on My card. Verify the same call and Encounter identifiers, direction and
+   terminal outcome. The attended subject also shows its authorized event.
+7. Repeat declined, caller-cancelled and missed cases, then a text message and
+   enabled attachments. Notifications and history derive from the same
+   canonical Communication; projection in two views does not duplicate it.
+
+Repeat for each host-enabled authorized role: veterinarian, hospital emergency
+clinician, paramedic, municipal police/traffic officer and lifeguard. Record
+the exact role and subject-kind variant. A veterinarian-to-animal pass does
+not close doctor-to-human or public-safety variants. The jurisdiction policy
+must explicitly authorize contact disclosure and each subsequent operation.
+
+### 15.4 Recipient identity, registered devices and delivery
+
+Developer requirements:
+
+1. Address the call to the verified emergency-contact identity, independently
+   of the attended card and the card currently selected in the portal.
+2. Register each browser or native application installation separately. The
+   user enables notifications; the installation obtains its Web Push
+   subscription or native push token and registers it with the owning BFF.
+   Login, a card DID, email and telephone number are not push tokens.
+3. Bind registrations to the authenticated recipient and the authorized
+   application/environment. Support several enabled installations and token
+   renewal, expiry, account changes and explicit revocation. Never accept a
+   recipient identity supplied by the browser as authority.
+4. Notify the explicitly resolved active registrations. A browser portal can
+   receive Web Push without an open card or page, subject to browser/OS
+   support and permission. A native app uses its configured push provider.
+5. Keep external notifications content-free. Opening one restores the portal
+   or app and requires authentication/unlock before showing caller, attended
+   subject, organization/service or Encounter details or joining the call.
+6. Let the first authorized device answer atomically. Stop ringing on sibling
+   devices and reject their attempts to obtain a second recipient media grant
+   or end the winning session's call. Both refusals return HTTP 409; readback
+   must retain the received state until an authorized participant ends it.
+7. Keep the in-page notice, browser push, native push and verified email/SMS
+   delivery separate in implementation, status and acceptance evidence.
+
+Recipient identity and device delivery are independent of card navigation.
+The in-page incoming banner, browser Web Push, native application push and
+email/SMS are distinct mechanisms with separate execution evidence. Polling
+an open page is not a push-delivery pass.
+
+Repeat the recipient case with several attended cards and multiple registered
+devices/applications/portals bound to that same verified recipient identity.
+The server resolves an explicit snapshot of enabled, non-revoked device keys
+using the existing directed-message device-audience contract. The attended
+card's DID identifies the subject; it is not the recipient's device address.
+Email/phone sign-in only supplies verified account evidence and must not
+silently link unrelated accounts across identity providers.
+
+Test no selected card, another selected card, background/closed browser,
+native application where implemented, locked profile, logged-out session and
+revoked device. The first authorized device that answers wins; sibling
+devices stop ringing and cannot obtain another participant grant. A locked
+or logged-out device may receive a content-free notice and must authenticate
+before receiving protected context or joining media. Follow the existing
+`notificationPreview: hidden` content policy for external push payloads.
+Test configured, verified email/SMS fallbacks and their actual delivery
+receipts separately; do not label an unconfigured provider, queued job or
+rendered banner delivered. Missing native/push adapters remain unexecuted.
+
+### 15.5 Exceptional access and care handover
+
+1. Revoke ordinary subject permission and repeat introduction. Identification
+   may succeed but protected data/contact actions remain denied.
+2. For the exact eligible healthcare role and subject, request break-glass
+   using incident/Encounter, mandatory reason, permitted scope and expiry.
+   The server evaluates eligibility; a medical-role label is insufficient.
+3. Verify scoped access and its audit/recipient notice, then expire/revoke it
+   and retry from the already open browser. Repeat as an ineligible responder
+   and require denial without contact disclosure or an RTC grant.
+4. Exercise a human ambulance-to-hospital transfer. The receiving service
+   explicitly accepts handover and starts its distinct Encounter. Permanent
+   transfer completes the departing Encounter; temporary transfer uses the
+   canonical on-hold/return contract rather than silently closing it.
+5. Verify Encounter links and service assignments by authoritative readback.
+   Reconcile future professional recipients through the existing
+   `reconcileEncounterCommunicationAudience` contract. Previously sent
+   Communications retain their original recipient snapshots.
+6. In the hospital Encounter, record permitted tests/results and publish the
+   reviewed clinical contribution. Personal sees its authorized provenance,
+   journey update and conversation; ordinary draft tests are not completed
+   clinical documents. Repeat transfer/reload without duplicate Encounters.
+
+### 15.6 Execution and release evidence
+
+Give every row/role/subject a separate Tuskr execution status and matching
+numbered Playwright journey. Record the control labels, two account contexts,
+exact revisions, actual persistence/readback, RTC media evidence and cleanup.
+Use the same sequence for manual acceptance; the user must be able to follow
+it without knowing a fixture name or choosing a hidden API path.
+
+The Demo gate runs first through its BFF vault; the network gate first uses
+the local memory GW, then local-network and Test Network with real authority.
+Do not claim the combined journey passed from component tests, a preloaded
+root-channel call or a collection of disconnected backend tests. Missing UI,
+missing adapter and policy denial remain distinct observed outcomes.

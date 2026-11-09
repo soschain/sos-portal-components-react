@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+- Add a persisted RTC completion signal for local/remote hangup and injected
+  canonical terminal-state observation. Release tracks, de-duplicate end
+  requests, preserve retryable history failures and cancel invitations after
+  connection failure. Load browser media capability before issuing a grant.
+
+- Add shared account-level push registration controls with explicit enable,
+  current-browser disable, other-device revocation and unavailable/denied
+  states. Permission requests, transports, identity and persistence remain in
+  the host adapters.
+
+- Add one controlled emergency-contact card directory with separate controller
+  context, primary-recipient presentation and injected add/remove/priority
+  operations. It owns no storage or authority and can render the same state
+  across execution modes; native rendering remains a separate adapter.
+
+- Specify the complete created-card emergency acceptance journey under the
+  existing Tuskr IDs: My card, dependent/controller/contact defaults, pasted
+  identifier/manual tuple/camera/image intake, linked-identifier discovery,
+  Encounter-scoped contact and RTC, recipient-card history, exceptional access
+  and ambulance/hospital handover. Distinguish requirements from executed
+  evidence and isolated media cases from full lifecycle acceptance.
+
 ## 0.3.0 - 2026-11-08
 
 - Export shared device-assistance preferences through an independent SOS entry,

@@ -80,7 +80,10 @@ This is the current runtime inventory, not completion of the whole catalogue:
 | --- | --- |
 | `SubjectConversationChat` | SOS projection of authorized subject Communications into the neutral Antifraud conversation renderer. |
 | `createLiveKitRealtimeCallClient` | Host-configured RTC client adapter; the BFF retains authorization, credentials and Communication persistence. |
+| `useRealtimeCallSessionLifecycle` | Shared persisted-end observation and profile-owned session cleanup for Personal and Professional, including React Strict Mode replay. |
 | `DeviceAssistancePreferences` | Reexport of Antifraud's controlled web preferences renderer. |
+| `PushNotificationRegistration` | Controlled browser-registration status, explicit enable and per-device revoke actions. The host owns permission, subscription/token, verified identity, BFF and transport. |
+| `EmergencyContactCardDirectory` | Controlled card-linked emergency recipients and primary priority; host callbacks retain contact mutation, controller authority and persistence. |
 
 The complete base-UI extraction is still pending. `PortalHeader`,
 `PortalSettingsPanel`, profile protection, subject/card navigation and several
