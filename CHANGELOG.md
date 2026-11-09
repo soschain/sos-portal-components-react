@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.1 - 2026-11-09
+
 - Add a persisted RTC completion signal for local/remote hangup and injected
   canonical terminal-state observation. Release tracks, de-duplicate end
   requests, preserve retryable history failures and cancel invitations after
