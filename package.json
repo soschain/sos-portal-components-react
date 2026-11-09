@@ -1,6 +1,6 @@
 {
   "name": "sos-portal-components-react",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Shared portal UI for base components",
   "license": "Apache-2.0",
   "type": "module",
