@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.2 - 2026-11-10
 
 - Add controlled `SubjectCardLocatorFields` for card-number or DID/QR entry.
   Number entry distinguishes person/animal and animal taxonomy, including
@@ -55,11 +55,11 @@
 
 - Replace the dated developer handoff with numbered, README-linked guides for
   generic portal modes/authentication and detailed cross-portal Tuskr cases.
-  Preserve the existing `SOS-PORTAL-001`–`029` and specialist research IDs.
+  Preserve the existing `SOS-PORTAL-001`-`029` and specialist research IDs.
 - Distinguish public Demo real-email account login from fixed Firebase test
   phone fixtures, BFF-owned Demo persistence from Test Network authority/GW
   lifecycle, and dedicated RTC media from Communication history and assistants.
-- Document positive/negative Personal ↔ Professional journeys, both-side
+- Document positive/negative Personal ? Professional journeys, both-side
   readback, profile/relationship revocation, sector variants and evidence
   boundaries without claiming unexecuted gates have passed.
 - Specify dependency-by-case progression: BFF/memory Demo first, independent
