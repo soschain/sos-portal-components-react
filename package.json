@@ -7,6 +7,10 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./subject-card-locator-fields": {
+      "types": "./dist/SubjectCardLocatorFields.d.ts",
+      "default": "./dist/SubjectCardLocatorFields.js"
+    },
     "./device-assistance-preferences": {
       "types": "./dist/DeviceAssistancePreferences.d.ts",
       "default": "./dist/DeviceAssistancePreferences.js"

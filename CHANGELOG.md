@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add controlled `SubjectCardLocatorFields` for card-number or DID/QR entry.
+  Number entry distinguishes person/animal and animal taxonomy, including
+  species beyond the supplied presets. Hosts provide labels/options and own
+  resolution and authorization; the fields select no mode, storage or provider.
+
 ## 0.3.1 - 2026-11-09
 
 - Add a persisted RTC completion signal for local/remote hangup and injected
