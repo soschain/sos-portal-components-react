@@ -1,5 +1,6 @@
 export * from './SubjectConversationChat.js'
 export * from './DeviceAssistancePreferences.js'
+export * from './SubjectCardLocatorFields.js'
 export * from './LiveKitRealtimeCallClient.js'
 export * from './EmergencyContactCardDirectory.js'
 export * from './PushNotificationRegistration.js'

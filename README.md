@@ -21,6 +21,15 @@ release closure still requires every affected boundary.
 
 ## Runtime parity
 
+`SubjectCardLocatorFields` is a controlled web input, exported separately at
+`sos-portal-components-react/subject-card-locator-fields`. It distinguishes
+card number from DID/QR entry. For numbers, the user chooses person or animal;
+animals also choose a supplied species or enter another NCBI taxonomy ID.
+The host verifies those hints against the registered card. DID/QR lookup uses
+the registered identity without asking the user to reinterpret its species.
+The same renderer works in Demo and Network; it provides no authorization or
+persistence and requires a native renderer before use in Expo.
+
 Components share use-case state between Demo and Test Network. Native support
 is export-specific: conversation uses the React Native/Web adapter; the device
 preferences renderer currently uses web DOM. A native preferences renderer
