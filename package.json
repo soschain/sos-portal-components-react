@@ -22,7 +22,16 @@
     "./subject-conversation-chat": {
       "types": "./dist/SubjectConversationChat.d.ts",
       "default": "./dist/SubjectConversationChat.js"
-    }
+    },
+    "./encounter-journey": {
+      "types": "./dist/EncounterJourneyPanel.d.ts",
+      "default": "./dist/EncounterJourneyPanel.js"
+    },
+    "./encounter-transfer-console": {
+      "types": "./dist/EncounterTransferConsole.d.ts",
+      "default": "./dist/EncounterTransferConsole.js"
+    },
+    "./encounter-journey.css": "./dist/encounter-journey.css"
   },
   "files": [
     "dist",
@@ -31,7 +40,7 @@
   ],
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "build": "npm run clean && tsc -p tsconfig.build.json && node -e \"require('node:fs').copyFileSync('src/encounter-journey.css','dist/encounter-journey.css')\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --maxWorkers=1",
     "check": "npm run typecheck && npm test && npm run build",
@@ -76,7 +85,8 @@
   },
   "dependencies": {
     "antifraud-portal-components-react": "0.3.0",
-    "sos-data-utils-ts": "0.6.30"
+    "fhir-data-utils-ts": "0.6.24",
+    "sos-data-utils-ts": "0.6.33"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",

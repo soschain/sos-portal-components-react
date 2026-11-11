@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add controlled, host-authorized Encounter journey and transfer components, including persisted response validation and read-only Personal presentation. Retain the UHC transfer console through a compatibility wrapper.
+- Recover the shared person/animal clinical-section, permission and US Core STU6 contract; distinguish existing views from the pending complete example lifecycle.
+
 ## 0.3.2 - 2026-11-10
 
 - Add controlled `SubjectCardLocatorFields` for card-number or DID/QR entry.
