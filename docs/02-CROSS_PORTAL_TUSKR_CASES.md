@@ -604,3 +604,43 @@ the local memory GW, then local-network and Test Network with real authority.
 Do not claim the combined journey passed from component tests, a preloaded
 root-channel call or a collection of disconnected backend tests. Missing UI,
 missing adapter and policy denial remain distinct observed outcomes.
+
+
+### 15.7 Encounter Consent and persisted service journey
+
+Use the [clinical-section contract](03-CLINICAL_SECTIONS_AND_US_CORE_CONTRACT.md)
+for permission targets independently of the flavour's visible navigation.
+
+1. Create My card and a dependent card in Personal. Introduce that exact
+   dependent card in Professional Emergency through the normal locator.
+2. Without an applicable active rule, Encounter reads and mutations are denied.
+   Request access for the verified profile's organization, country or verified
+   professional email. Personal must show **Awaiting approval**, never active
+   access. The Professional cannot approve its own request. The owning vault
+   saves one Communication containing the requested draft Consent Bundle in
+   the same transaction. A retry retains that receipt; an audit-write failure
+   leaves neither a new request nor a draft rule behind.
+3. As controller, review the recipient, role, purpose and general Encounters
+   target in Personal **Contacts and permissions**, then save. Refresh
+   Professional permissions and confirm the current effective result.
+4. Create and start an Encounter, temporarily transfer to Assessment, transfer
+   definitively to Continuing care, then return to the original held Encounter
+   and complete it. Check confirmed status and immutable history after every
+   command. A lost-response retry retains the same operation identifier and
+   must neither create a duplicate Encounter nor duplicate history.
+5. In Personal **Emergency → Care journey**, read the same three Encounters
+   and eight history entries. Reload, unlock the profile and reopen the card;
+   the same saved journey remains. Personal has no clinical mutation controls.
+6. Invite a separate family member/caregiver. Before acceptance and an explicit
+   current Encounter Consent, their journey read is denied. After both, show
+   only the authorized read-only journey. Revoke the rule or membership and
+   confirm that a fresh read is denied. Emergency-contact status alone never
+   grants this access.
+7. Repeat the supported human and animal profile variants separately, including
+   desktop/light and mobile/dark. Invalid subject, organization, service,
+   revision, role and foreign invitation attempts must fail without mutation.
+
+This sequence transfers between services within one Demo organization.
+Cross-organization ambulance/hospital handover in 15.5 is a separate journey;
+passing this sequence does not establish that handover, clinical US Core CRUD,
+media, push, GW, blockchain or staging have passed.

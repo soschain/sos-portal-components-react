@@ -26,3 +26,5 @@ ports and provider routes in their own numbered README indexes:
 The guides specify acceptance targets. A link, manifest, implemented component
 or numbered Tuskr case does not establish that its end-to-end journey passed.
 Attach the actual environment and revision evidence to each execution.
+
+- [03 — Clinical sections, permissions and US Core contract](03-CLINICAL_SECTIONS_AND_US_CORE_CONTRACT.md)

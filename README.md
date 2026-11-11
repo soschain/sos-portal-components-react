@@ -87,6 +87,8 @@ This is the current runtime inventory, not completion of the whole catalogue:
 
 | Export | Owner / responsibility |
 | --- | --- |
+| `EncounterJourneyPanel` | Controlled create/status/transfer and read-only saved journey; BFF callbacks own authority and persistence. |
+| `EncounterTransferConsole` | Shared transfer presentation; UHC retains a deprecated compatibility wrapper. |
 | `SubjectConversationChat` | SOS projection of authorized subject Communications into the neutral Antifraud conversation renderer. |
 | `createLiveKitRealtimeCallClient` | Host-configured RTC client adapter; the BFF retains authorization, credentials and Communication persistence. |
 | `useRealtimeCallSessionLifecycle` | Shared persisted-end observation and profile-owned session cleanup for Personal and Professional, including React Strict Mode replay. |
@@ -227,3 +229,5 @@ group adapter.
    genuinely reusable.
 6. Remove compatibility implementations only in a later breaking release.
 
+
+See [clinical sections, permissions and US Core contract](docs/03-CLINICAL_SECTIONS_AND_US_CORE_CONTRACT.md) for the recovered person/animal mappings and pending full example lifecycle.
