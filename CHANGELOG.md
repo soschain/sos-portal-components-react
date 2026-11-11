@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.3 - 2026-11-11
+
 - Add controlled, host-authorized Encounter journey and transfer components, including persisted response validation and read-only Personal presentation. Retain the UHC transfer console through a compatibility wrapper.
 - Recover the shared person/animal clinical-section, permission and US Core STU6 contract; distinguish existing views from the pending complete example lifecycle.
 
