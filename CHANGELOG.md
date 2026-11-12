@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.4 - 2026-11-12
+
 - Render provider-supplied organization/service labels for authorized foreign history without exposing service-reference internals or mutation controls.
 
 - Keep other-organization Encounter history read-only in the shared journey action selector. Document consent-free professional encounter traceability, scoped history read grants and the full IPS permission catalog.
