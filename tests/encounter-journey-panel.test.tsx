@@ -5,6 +5,7 @@ import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react'
 import {afterEach,expect,it,vi} from 'vitest'
 import * as ui from '../src/index.js'
 import {EncounterClaim as E,EncounterStatusR5 as S} from 'fhir-data-utils-ts/claims'
+import {SOSCHAIN_DEMO_ORGANIZATIONS} from 'sos-data-utils-ts/portal-access-profiles'
 import {FHIR_ENCOUNTER_TRANSFER_TEST_DATA as f} from 'fhir-data-utils-ts/data'
 import {buildFlatClaimResourceEntry} from 'fhir-data-utils-ts/flat-claim-resource-graph'
 import type {PortalEncounterJourneyView,PortalEncounterRequest} from 'sos-data-utils-ts/portal-encounter-journey'
@@ -84,4 +85,14 @@ it.each([`${f.source.id}-destination`,`encounter-${f.source.id}`])('keeps the op
  const row={...record,entry:{...record.entry,claims:{...record.entry.claims,[E.Identifier]:identifier}}}
  render(<ui.EncounterJourneyPanel subjectLabel="Shared subject" view={{...view,canManage:false,encounters:[row]}}/>)
  expect(screen.queryByText(identifier)).toBeNull()
+})
+
+it('displays foreign history as read-only while only own-organization encounters enter the action selector',()=>{
+ const label=SOSCHAIN_DEMO_ORGANIZATIONS.find(item=>item.sector==='public-safety')!.titleEn
+ const foreign={...record,serviceLabel:label,entry:{...record.entry,entryId:record.entry.entryId+'-foreign',reference:record.entry.reference+'-foreign',claims:{...record.entry.claims,[E.ServiceProvider]:f.indexRecipientReference,[E.ServiceType]:f.destination.serviceReference}}}
+ render(<ui.EncounterJourneyPanel subjectLabel={f.subjectReference} view={{...view,encounters:[foreign,record]}} onCommand={vi.fn()}/>)
+ expect(screen.getByText(label,{exact:true})).toBeTruthy()
+ expect(screen.queryByText(f.destination.serviceReference,{exact:true})).toBeNull()
+ expect(screen.getByLabelText('Encounter').querySelectorAll('option')).toHaveLength(1)
+ expect((screen.getByLabelText('Encounter') as HTMLSelectElement).value).toBe(record.entry.reference)
 })

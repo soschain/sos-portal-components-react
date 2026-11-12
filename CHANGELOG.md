@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Render provider-supplied organization/service labels for authorized foreign history without exposing service-reference internals or mutation controls.
+
+- Keep other-organization Encounter history read-only in the shared journey action selector. Document consent-free professional encounter traceability, scoped history read grants and the full IPS permission catalog.
+
 ## 0.3.3 - 2026-11-11
 
 - Add controlled, host-authorized Encounter journey and transfer components, including persisted response validation and read-only Personal presentation. Retain the UHC transfer console through a compatibility wrapper.

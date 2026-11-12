@@ -58,7 +58,11 @@ invent new section identifiers from UI labels.
 A card controller manages grants. Caregiver/family membership and being an
 emergency contact do not independently grant clinical access. Evaluate explicit
 Consent for the subject, verified recipient/role, purpose, period and target on
-every protected read or mutation. General Encounter access is the current
+every protected read or mutation. Patient Consent is not a prerequisite for a
+verified professional to record an encounter with the card or manage their own
+organization's encounters. Other organizations' encounter history requires read
+Consent and remains read-only. Recording an encounter grants no clinical access.
+General Encounter read access is the current
 scope; emergency-only Encounter filtering requires a separate defined contract.
 
 Demo Consent records use a separate subject/generation-scoped collection through
@@ -197,3 +201,31 @@ The fixture matrix must cover at least `Condition` in both profiles,
 `Goal`, `FamilyMemberHistory`, `CareTeam`, `RelatedPerson`, `Encounter` and the
 supported advance-directive profiles. A green rendering-only test is not CRUD
 proof.
+
+### Professional treatment and emergency purpose
+
+Within the same subject, recipient, role, validity and data scope, professional
+treatment covers emergency treatment. Emergency-only permission does not grant
+general treatment. The canonical actor precedence still applies: a specific
+organization or professional rule may vary a country rule, and deny wins at
+the same specificity. This purpose hierarchy does not broaden family/caregiver
+permissions. Country-level professional rules may specify treatment or emergency.
+
+The controller can choose all 16 IPS sections or individual sections for either
+purpose. The four emergency-summary sections are a presentation preset, never
+the complete IPS permission catalog. Operational verification roles retain their
+independent section restrictions.
+
+### Appointment ownership
+
+Organization-authorized Appointments/Scheduling staff create and read that
+organization's appointments without patient Consent. Their group authorization
+does not permit the card's other organizations' appointments. A controller's
+card-wide calendar and an authorized family/caregiver aggregation belong to
+the Personal view and its delegation, independently of professional scheduling
+and Encounter-history permissions.
+
+Routine scheduling fits the `PATADMIN` administrative purpose under `HOPERAT`.
+Do not infer `TREAT` or `ETREAT` from an Appointment resource or booking action.
+A scheduling workforce authorization and a patient clinical-access Consent
+remain separate. See the [HL7 ActReason purpose hierarchy](https://terminology.hl7.org/en/CodeSystem-v3-ActReason.html#v3-ActReason-PATADMIN).

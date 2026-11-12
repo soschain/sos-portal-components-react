@@ -28,14 +28,15 @@ export function EncounterJourneyPanel({subjectLabel,view,onCommand,onRefresh,cop
   const [destinationReference,setDestinationReference]=useState(''),[transferOpen,setTransferOpen]=useState(false)
   const [busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('')
   const retry=useRef<PortalEncounterRequest|null>(null)
-  const selected=view.encounters.find(row=>row.entry.reference===selectedReference)
-    ??view.encounters.find(row=>row.entry.claims[E.Status]===S.InProgress)??view.encounters[0]
+  const manageable=view.encounters.filter(row=>view.services.some(service=>service.reference===row.entry.claims[E.ServiceType]&&(!row.entry.claims[E.ServiceProvider]||service.organizationReference===row.entry.claims[E.ServiceProvider])))
+  const selected=manageable.find(row=>row.entry.reference===selectedReference)
+    ??manageable.find(row=>row.entry.claims[E.Status]===S.InProgress)??manageable[0]
   const canManage=Boolean(view.canManage&&onCommand),blocked=busy||Boolean(error&&retry.current)
   const service=view.services.find(item=>item.reference===serviceReference)??view.services[0]
   const destinations=view.services.filter(item=>item.organizationReference===selected?.entry.claims[E.ServiceProvider]&&item.reference!==selected.entry.claims[E.ServiceType])
   const destination=destinations.find(item=>item.reference===destinationReference)??destinations[0]
   const stages:EncounterTransferStage[]=view.encounters.map(row=>({identifier:row.entry.reference,
-    serviceLabel:view.services.find(item=>item.reference===row.entry.claims[E.ServiceType])?.label||row.entry.claims[E.ServiceType]||'Encounter',
+    serviceLabel:row.serviceLabel||view.services.find(item=>item.reference===row.entry.claims[E.ServiceType])?.label||'Other organization encounter',
     arrivedAt:row.entry.claims[E.ActualPeriodStart]||row.entry.claims[E.PeriodStart]||'',status:row.entry.claims[E.Status] as EncounterTransferStage['status'],
   }))
   const statuses=selected?.allowedStatuses??portalEncounterNextStatuses(selected?.entry.claims[E.Status]||'')
@@ -69,7 +70,7 @@ export function EncounterJourneyPanel({subjectLabel,view,onCommand,onRefresh,cop
       <button type="submit" disabled={blocked}>{copy.create}</button>
     </form>}
     {!view.encounters.length?<p>{copy.empty}</p>:<>
-      {canManage&&selected&&<div className="sos-encounter-actions"><label>{copy.encounter}<select aria-label={copy.encounter} value={selected.entry.reference} disabled={blocked} onChange={event=>{setSelectedReference(event.target.value);setTransferOpen(false)}}>{stages.map(item=><option key={item.identifier} value={item.identifier}>{item.serviceLabel} · {item.status}</option>)}</select></label>
+      {canManage&&selected&&<div className="sos-encounter-actions"><label>{copy.encounter}<select aria-label={copy.encounter} value={selected.entry.reference} disabled={blocked} onChange={event=>{setSelectedReference(event.target.value);setTransferOpen(false)}}>{stages.filter(item=>manageable.some(row=>row.entry.reference===item.identifier)).map(item=><option key={item.identifier} value={item.identifier}>{item.serviceLabel} · {item.status}</option>)}</select></label>
         {statuses.map(status=><button key={status} type="button" disabled={blocked} onClick={()=>void execute({action:'status',operationId:crypto.randomUUID(),encounterReference:selected.entry.reference,expectedRevision:selected.revision,status}).catch(()=>{})}>{statusLabel(status)}</button>)}
         {destinations.length>0&&selected.entry.claims[E.Status]===S.InProgress&&<button type="button" disabled={blocked} onClick={()=>setTransferOpen(value=>!value)}>{copy.transfer}</button>}
       </div>}
@@ -78,7 +79,7 @@ export function EncounterJourneyPanel({subjectLabel,view,onCommand,onRefresh,cop
         {...(transferOpen&&destination?{destinationPreview:{serviceLabel:destination.label}}:{})}
         {...(canManage&&transferOpen?{onApplyTransfer:transfer}:{})}/>
     </>}
-    {view.history.length>0&&<details><summary>{copy.history}</summary><ol>{view.history.map(row=><li key={row.entry.reference} data-encounter-history={row.entry.claims[H.Encounter]}><time>{row.entry.claims[H.ActualPeriodStart]}</time> · {row.entry.claims[H.Status]} · {view.services.find(service=>service.reference===row.entry.claims[H.ServiceType])?.label||row.entry.claims[H.ServiceType]}</li>)}</ol></details>}
+    {view.history.length>0&&<details><summary>{copy.history}</summary><ol>{view.history.map(row=><li key={row.entry.reference} data-encounter-history={row.entry.claims[H.Encounter]}><time>{row.entry.claims[H.ActualPeriodStart]}</time> · {row.entry.claims[H.Status]} · {row.serviceLabel||view.services.find(service=>service.reference===row.entry.claims[H.ServiceType])?.label||'Other organization encounter'}</li>)}</ol></details>}
     {error&&<p role="alert">{error}</p>}
     {canManage&&error&&retry.current&&<button type="button" disabled={busy} onClick={()=>void execute(retry.current!).catch(()=>{})}>{copy.retry}</button>}
     {notice&&<p role="status">{notice}</p>}

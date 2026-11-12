@@ -613,17 +613,22 @@ for permission targets independently of the flavour's visible navigation.
 
 1. Create My card and a dependent card in Personal. Introduce that exact
    dependent card in Professional Emergency through the normal locator.
-2. Without an applicable active rule, Encounter reads and mutations are denied.
-   Request access for the verified profile's organization, country or verified
+2. Introducing the card records one traceability Encounter for the protected
+   professional's organization without patient Consent, regardless of
+   professional role or country. Retry the same intake and confirm one record.
+   Own-organization reads/status changes remain available without that grant;
+   clinical discharge and clinical data retain their independent capabilities.
+   Other organizations' Encounter history requires read Consent. Request access for the verified profile's organization, country or verified
    professional email. Personal must show **Awaiting approval**, never active
    access. The Professional cannot approve its own request. The owning vault
    saves one Communication containing the requested draft Consent Bundle in
    the same transaction. A retry retains that receipt; an audit-write failure
    leaves neither a new request nor a draft rule behind.
-3. As controller, review the recipient, role, purpose and general Encounters
+3. As controller, verify the requesting organization separately from the
+   requested country/organization/professional audience. Review role, purpose and general Encounters
    target in Personal **Contacts and permissions**, then save. Refresh
    Professional permissions and confirm the current effective result.
-4. Create and start an Encounter, temporarily transfer to Assessment, transfer
+4. Start the automatically recorded Encounter, temporarily transfer to Assessment, transfer
    definitively to Continuing care, then return to the original held Encounter
    and complete it. Check confirmed status and immutable history after every
    command. A lost-response retry retains the same operation identifier and
