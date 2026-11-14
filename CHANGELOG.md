@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Require the independent dependency gate in the normal check: reject GDC
+  declarations and aliases, source/declaration/emitted imports or re-exports,
+  and every transitive registry lock entry.
+
+- Consume the published FHIR and SOS Data 0.7 contracts through registry-only
+  dependencies, preserving the shared UI API and the existing neutral
+  Antifraud renderer.
+
 - Pin the reviewed SOS Data contract version used by the shared journey
   renderer so dependency resolution does not reinstall an older catalog.
 

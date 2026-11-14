@@ -43,7 +43,8 @@
     "build": "npm run clean && tsc -p tsconfig.build.json && node -e \"require('node:fs').copyFileSync('src/encounter-journey.css','dist/encounter-journey.css')\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --maxWorkers=1",
-    "check": "npm run typecheck && npm test && npm run build",
+    "check:independent-dependencies": "node --test tests/no-gdc-dependencies.contract.mjs",
+    "check": "npm run typecheck && npm test && npm run build && npm run check:independent-dependencies",
     "prepack": "npm run check"
   },
   "engines": {
@@ -85,8 +86,8 @@
   },
   "dependencies": {
     "antifraud-portal-components-react": "0.3.0",
-    "fhir-data-utils-ts": "0.6.24",
-    "sos-data-utils-ts": "0.6.35"
+    "fhir-data-utils-ts": "0.7.0",
+    "sos-data-utils-ts": "0.7.0"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
