@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 0.4.0 - 2026-11-14
+
+- Verify the full 33 component tests and three required dependency contracts,
+  typecheck/build, source/emitted privacy and all six JavaScript public entries
+  plus CSS against the independent registry cohort. This release preserves
+  the existing shared API; it does not incorporate UHC components.
+
 - Require the independent dependency gate in the normal check: reject GDC
   declarations and aliases, source/declaration/emitted imports or re-exports,
   and every transitive registry lock entry.
