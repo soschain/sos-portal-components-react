@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Pin the reviewed SOS Data contract version used by the shared journey
+  renderer so dependency resolution does not reinstall an older catalog.
+
 ## 0.3.4 - 2026-11-12
 
 - Render provider-supplied organization/service labels for authorized foreign history without exposing service-reference internals or mutation controls.

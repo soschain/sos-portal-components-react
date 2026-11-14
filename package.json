@@ -86,7 +86,7 @@
   "dependencies": {
     "antifraud-portal-components-react": "0.3.0",
     "fhir-data-utils-ts": "0.6.24",
-    "sos-data-utils-ts": "0.6.34"
+    "sos-data-utils-ts": "0.6.35"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
