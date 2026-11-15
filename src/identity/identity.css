@@ -1,0 +1,64 @@
+/* SOS-owned animal/subject identity composition. Host state and neutral compatibility tokens only. */
+.uhcp-animal-identity-readonly { align-items:start; display:grid; gap:1rem; grid-template-columns:minmax(8rem,12rem) minmax(0,1fr); }
+.uhcp-animal-identity-photo { aspect-ratio:3/4; border:1px solid var(--uhcp-border); border-radius:1rem; display:block; object-fit:cover; width:100%; }
+@media (max-width:620px) { .uhcp-animal-identity-readonly { grid-template-columns:minmax(0,1fr); } .uhcp-animal-identity-photo { max-width:12rem; } }
+.uhcp-identity-step-number {
+  align-items: center;
+  background: var(--uhcp-surface-accent);
+  border: 1px solid color-mix(in srgb, var(--uhcp-turquoise) 42%, var(--uhcp-border));
+  border-radius: 999px;
+  color: var(--uhcp-turquoise);
+  display: flex;
+  font-weight: 900;
+  height: 2.25rem;
+  justify-content: center;
+  position: relative;
+  width: 2.25rem;
+  z-index: 1;
+}
+.uhcp-identity-status { border-radius: 999px; font-size: .72rem; font-weight: 800; padding: .35rem .6rem; }
+.uhcp-identity-status-verified { background: color-mix(in srgb, var(--uhcp-emerald) 15%, transparent); color: var(--uhcp-emerald); }
+.uhcp-identity-status-pending { background: color-mix(in srgb, var(--uhcp-attention) 18%, transparent); color: color-mix(in srgb, var(--uhcp-attention) 72%, var(--uhcp-text)); }
+.uhcp-identity-status-rejected { background: color-mix(in srgb, #c64747 14%, transparent); color: #c64747; }
+.uhcp-animal-onboarding { display: grid; gap: 1.25rem; }
+.uhcp-animal-onboarding > header p { color: var(--uhcp-muted, #5f6875); margin: .35rem 0 0; }
+.uhcp-animal-onboarding form { display: grid; gap: 1rem; }
+.uhcp-animal-onboarding fieldset { border: 1px solid var(--uhcp-border, #d9dee7); border-radius: 1rem; margin: 0; padding: 1rem; }
+.uhcp-animal-onboarding legend { align-items: center; display: flex; font-weight: 800; gap: .55rem; padding: 0 .35rem; }
+.uhcp-animal-onboarding-fields { display: grid; gap: .85rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.uhcp-animal-onboarding-fields label { display: grid; gap: .35rem; }
+.uhcp-animal-onboarding-fields input, .uhcp-animal-onboarding-fields select { box-sizing: border-box; min-height: 2.8rem; width: 100%; }
+.uhcp-animal-onboarding-submit { justify-self: start; }
+.uhcp-animal-onboarding-v2 details { background:var(--uhcp-surface, #fff); border:1px solid var(--uhcp-border, #d9dee7); border-radius:1rem; overflow:hidden; }
+.uhcp-animal-onboarding-v2 summary { align-items:center; cursor:pointer; display:flex; font-weight:850; gap:.55rem; list-style:none; padding:1rem; }
+.uhcp-animal-onboarding-v2 summary::-webkit-details-marker { display:none; }
+.uhcp-animal-onboarding-v2 summary::after { content:'⌄'; margin-inline-start:auto; transition:transform .18s ease; }
+.uhcp-animal-onboarding-v2 details[open] summary::after { transform:rotate(180deg); }
+.uhcp-animal-onboarding-v2 details > .uhcp-animal-onboarding-fields,
+.uhcp-animal-onboarding-v2 details > .uhcp-animal-onboarding-primary,
+.uhcp-animal-onboarding-v2 details > .uhcp-identity-entity-editor { border-top:1px solid var(--uhcp-border, #d9dee7); padding:1rem; }
+.uhcp-animal-onboarding-primary { align-items:start; display:grid; gap:1rem; grid-template-columns:minmax(10rem, 14rem) minmax(0, 1fr); }
+.uhcp-animal-photo { display:grid; gap:.45rem; position:relative; }
+.uhcp-animal-photo-dropzone { align-items:center; aspect-ratio:1; background:var(--uhcp-accent-soft, #e9f3ff); border:2px dashed color-mix(in srgb, var(--uhcp-turquoise, #1597a6) 58%, var(--uhcp-border, #d9dee7)); border-radius:1.25rem; cursor:pointer; display:flex; font-size:4rem; font-weight:850; justify-content:center; overflow:hidden; width:100%; }
+.uhcp-animal-photo-dropzone:hover,.uhcp-animal-photo-dropzone:focus-within { background:color-mix(in srgb, var(--uhcp-accent-soft, #e9f3ff) 70%, var(--uhcp-turquoise, #1597a6)); border-style:solid; }
+.uhcp-animal-photo-dropzone img { height:100%; object-fit:cover; width:100%; }
+.uhcp-animal-photo-dropzone input { height:1px; opacity:0; overflow:hidden; position:absolute; width:1px; }
+.uhcp-animal-photo-remove { background:#b42318; border:2px solid #fff; border-radius:999px; block-size:2.25rem; color:#fff; cursor:pointer; font-size:1.45rem; inline-size:2.25rem; inset-block-start:.65rem; inset-inline-end:.65rem; line-height:1; position:absolute; }
+.uhcp-animal-photo small { color:var(--uhcp-muted, #5f6875); }
+@media (max-width: 42rem) { .uhcp-animal-onboarding-primary { grid-template-columns:1fr; } .uhcp-animal-photo { justify-self:center; max-width:15rem; width:100%; } }
+.uhcp-subject-identity-card { border: 1px solid var(--uhcp-border, #d9dee7); border-radius: 1rem; display: grid; gap: 1rem; padding: 1rem; }
+.uhcp-subject-identity-card > header { align-items: center; display: grid; gap: .8rem; grid-template-columns: auto 1fr auto; }
+.uhcp-subject-identity-edit { align-items: center; background: var(--uhcp-action-soft, #e8f3ff); border: 1px solid var(--uhcp-action-end, #2563a9); border-radius: 50%; color: var(--uhcp-action-end, #2563a9); cursor: pointer; display: inline-flex; font: inherit; font-size: 1.25rem; height: 2.75rem; justify-content: center; width: 2.75rem; }
+.uhcp-subject-identity-edit:hover, .uhcp-subject-identity-edit:focus-visible { background: var(--uhcp-action-end, #2563a9); color: #fff; }
+.uhcp-subject-identity-card img, .uhcp-subject-identity-avatar { align-items: center; aspect-ratio: 1; border-radius: 50%; display: flex; height: 3.5rem; justify-content: center; object-fit: cover; width: 3.5rem; }
+.uhcp-subject-identity-avatar { background: var(--uhcp-accent-soft, #e9f3ff); font-size: 1.4rem; font-weight: 850; }
+.uhcp-subject-identity-card h3 { margin: .15rem 0 0; }
+.uhcp-subject-identity-card dl { display: grid; gap: .65rem; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); margin: 0; }
+.uhcp-subject-identity-card dt { color: var(--uhcp-muted, #5f6875); font-size: .8rem; }
+.uhcp-subject-identity-card dd { font-weight: 700; margin: .15rem 0 0; overflow-wrap: anywhere; }
+.uhcp-subject-identity-relationship { align-items: center; background: var(--uhcp-surface-soft, #f6f8fb); border-radius: .8rem; display: grid; gap: .25rem; padding: .8rem; }
+.uhcp-animal-onboarding-actions { align-items:center; display:flex; flex-wrap:wrap; gap:.75rem; justify-content:flex-end; }
+.uhcp-animal-identity-readonly-grid { display:grid; gap:1rem; grid-template-columns:repeat(2,minmax(0,1fr)); margin:0; padding:1rem; }
+.uhcp-animal-identity-readonly-grid div { background:var(--uhcp-surface,#fff); border:1px solid var(--uhcp-border,#cbd5e1); border-radius:.8rem; padding:.8rem; }
+.uhcp-animal-identity-readonly-grid dt { color:var(--uhcp-muted,#475569); font-size:.82rem; font-weight:700; }
+.uhcp-animal-identity-readonly-grid dd { color:var(--uhcp-text,#0f172a); font-weight:750; margin:.25rem 0 0; overflow-wrap:anywhere; }
