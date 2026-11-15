@@ -63,6 +63,28 @@ boundary is deliberately chosen.
 
 ## Ownership boundaries
 
+The root, `clinical`, `care` and `identity` exports compose shared clinical
+authoring, IPS summaries, cards, communications, emergency tasks, notifications
+and human/animal identity entry. FHIR utilities own clinical projections and
+document builders; SOS Data owns operation and notification contracts. Neutral
+identity/evidence, recipient activation and access-request renderers are owned
+by Antifraud components. This package has no UHC or GDC dependency.
+
+Import `sos-portal-components-react/styles.css` once at the application root.
+Hosts supply branding, authorized subjects, capabilities, persistence callbacks
+and speech/RTC providers. Selecting an evidence file or submitting an intent
+does not upload, verify identity, grant access or confirm recipient acceptance.
+The same renderers serve Demo and Test Network; the host selects their transport.
+
+The shell composes controlled Antifraud renderers. SOS owns the explicit browser
+theme/density preference adapter and current-subject context. Its storage namespace
+holds UI preferences only; applications supply their own namespace. The relocated
+DOM forms and shell are web components, not evidence of native Expo compatibility.
+
+The current source cohort requires the unpublished reviewed Antifraud component
+snapshots for its new APIs. Registry pins are updated bottom-up before release;
+baseline registry metadata alone does not make the new APIs publicly available.
+
 - This package owns reusable portal presentation and controlled user intents.
 - Applications own branding, routes, environment selection, BFF calls and
   server-resolved sector/role policy.

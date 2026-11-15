@@ -7,6 +7,19 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./identity": {
+      "types": "./dist/identity/index.d.ts",
+      "default": "./dist/identity/index.js"
+    },
+    "./clinical": {
+      "types": "./dist/clinical/index.d.ts",
+      "default": "./dist/clinical/index.js"
+    },
+    "./care": {
+      "types": "./dist/care/index.d.ts",
+      "default": "./dist/care/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
     "./subject-card-locator-fields": {
       "types": "./dist/SubjectCardLocatorFields.d.ts",
       "default": "./dist/SubjectCardLocatorFields.js"
@@ -40,7 +53,7 @@
   ],
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "build": "npm run clean && tsc -p tsconfig.build.json && node -e \"require('node:fs').copyFileSync('src/encounter-journey.css','dist/encounter-journey.css')\"",
+    "build": "npm run clean && tsc -p tsconfig.build.json && node -e \"const fs=require('node:fs'),path=require('node:path');for(const file of ['encounter-journey.css','styles.css','clinical/clinical.css','care/care.css','identity/current-subject.css','identity/identity.css']){fs.mkdirSync(path.dirname('dist/'+file),{recursive:true});fs.copyFileSync('src/'+file,'dist/'+file)}\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --maxWorkers=1",
     "check:independent-dependencies": "node --test tests/no-gdc-dependencies.contract.mjs",
@@ -85,12 +98,15 @@
     }
   },
   "dependencies": {
+    "antifraud-common-components-react": "1.2.1",
     "antifraud-portal-components-react": "0.3.0",
     "fhir-data-utils-ts": "0.7.0",
-    "sos-data-utils-ts": "0.7.0"
+    "sos-data-utils-ts": "0.7.0",
+    "terminology-components-react": "0.2.0"
   },
   "devDependencies": {
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "14.6.1",
     "@types/node": "22.19.15",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",

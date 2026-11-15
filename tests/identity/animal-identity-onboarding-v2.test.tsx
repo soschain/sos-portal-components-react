@@ -1,0 +1,136 @@
+import { REPOSITORY_SAFE_EXAMPLES } from 'sos-data-utils-ts/repository-privacy'
+// Flow contract: retain actual host-controlled identity entry/readback behavior in its independent SOS owner.
+// Copyright 2026 Connecting Solution & Applications Ltd under the Apache License, Version 2.0.
+// Flow contract: never use duplicated literals; reuse canonical test data and standard coding systems and values exported by their owning fhir-data-utils, gdc-common-utils, sos-data-utils, or vet-data-utils package.
+// @vitest-environment jsdom
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { AnimalIdentityOnboardingV2 } from '../../src/identity/AnimalIdentityOnboardingV2.js'
+import type { AnimalIdentityOnboardingV2Copy } from '../../src/identity/AnimalIdentityOnboardingV2.js'
+
+const copy: AnimalIdentityOnboardingV2Copy = {
+  title: 'Create animal', intro: 'Record the animal and its controller.',
+  animalStep: 'Animal identity', controllerStep: 'Owner or caregiver', evidenceStep: 'Identity evidence',
+  animalName: 'Animal name', taxonomyId: 'Species', birthDate: 'Birth date', sex: 'Sex',
+  sexUnknown: 'Unknown', sexFemale: 'Female', sexMale: 'Male', sexOther: 'Other',
+  identifierSystem: 'Identifier type', identifierValue: 'Identifier', controllerLegalName: 'Legal name',
+  controllerIdentifierType: 'Identity type', controllerIdentifierValue: 'Identity number',
+  controllerCountry: 'Country', relationship: 'Relationship', owner: 'Owner', caregiver: 'Caregiver',
+  ownerDocument: 'Controller document', animalDocument: 'Animal photo or document',
+  relationshipDocument: 'Relationship document', controllerPin: 'PIN', submit: 'Create animal',
+  controllerIsLegalRepresentative: 'This person is the animal legal representative or controller',
+  animalPreview: '{name} preview',
+  addAnimalPhoto: 'Add animal photo', removeAnimalPhoto: 'Remove animal photo', photoHelp: 'PNG or JPG, maximum 2 MiB, portrait 3:4, minimum 300 × 400 px.', photoTooLarge: 'The image must not exceed 2 MiB.', photoDimensionsInvalid: 'Use a portrait 3:4 image of at least 300 × 400 px.',
+  ownerKind: 'Entity type', responsibleParty: 'Responsible party', personOwner: 'Person', organizationOwner: 'Organization', regionalIdentifier: 'Regional identifier',
+  controllerRegion: 'Region', controllerEmail: 'Email', controllerTelephone: 'Telephone', contactRequired: 'Enter an email or telephone.',
+  verificationMethod: 'Verification method', physicalInPerson: 'Physical in-person', supervisedRemote: 'Supervised remote', electronicId: 'Electronic ID', unsupervisedRemote: 'Unsupervised remote', countryPlaceholder: 'Select a country',
+}
+
+describe('AnimalIdentityOnboardingV2', () => {
+  afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+
+  it('uses collapsible blocks, previews the animal image and confirms the single controller role', async () => {
+    vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue({ width: 600, height: 800, close: vi.fn() }))
+    const onSubmit = vi.fn().mockResolvedValue(undefined)
+    const { container } = render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={onSubmit}
+      countryOptions={[{ value: 'CA', label: 'Canada' }, { value: 'ES', label: 'Spain' }]}
+      regionOptionsByCountry={{ CA: [{ value: 'CA-BC', label: 'British Columbia' }] }}
+      identifierTypeOptions={{ person: [{ value: 'national_identity_card', label: 'National identity card' }], organization: [{ value: 'business_number', label: 'Business number' }] }}
+    />)
+
+    const blocks = container.querySelectorAll('details')
+    expect(blocks).toHaveLength(2)
+    expect(blocks[0]?.hasAttribute('open')).toBe(false)
+    expect(blocks[1]?.hasAttribute('open')).toBe(false)
+    expect((screen.getByRole('button', { name: 'Create animal' }) as HTMLButtonElement).disabled).toBe(true)
+    expect(screen.getByRole('group', { name: 'Animal identity' })).toBeTruthy()
+    expect(screen.getByRole('option', { name: 'Microchip (ISO 11784/11785)' })).toBeTruthy()
+    expect(screen.getByRole('group', { name: 'Owner or caregiver' })).toBeTruthy()
+    expect(screen.queryByRole('group', { name: 'Identity evidence' })).toBeNull()
+    expect((screen.getByRole('checkbox', { name: 'This person is the animal legal representative or controller' }) as HTMLInputElement).checked).toBe(true)
+    expect(screen.getByRole('button', { name: 'Add animal photo' })).toBeTruthy()
+    expect((screen.getByRole('radio', { name: 'Person' }) as HTMLInputElement).checked).toBe(true)
+    expect(screen.getByText('Responsible party')).toBeTruthy()
+    expect(screen.queryByRole('combobox', { name: 'Relationship' })).toBeNull()
+    expect((screen.getByRole('combobox', { name: 'Region' }) as HTMLSelectElement).disabled).toBe(true)
+
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Regional identifier' }))
+    expect((screen.getByRole('combobox', { name: 'Region' }) as HTMLSelectElement).disabled).toBe(false)
+
+    fireEvent.change(screen.getByLabelText('Animal name'), { target: { value: 'Pluto' } })
+    const photo = new File(['photo'], 'pluto.jpg', { type: 'image/jpeg' })
+    fireEvent.change(screen.getByRole('button', { name: 'Add animal photo' }).querySelector('input')!, { target: { files: [photo] } })
+    expect(await screen.findByRole('img', { name: 'Pluto preview' })).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Remove animal photo' }))
+    expect(screen.queryByRole('img', { name: 'Pluto preview' })).toBeNull()
+    fireEvent.change(screen.getByRole('button', { name: 'Add animal photo' }).querySelector('input')!, { target: { files: [photo] } })
+
+    fireEvent.change(screen.getByLabelText('Identifier'), { target: { value: '981020000123456' } })
+    fireEvent.change(screen.getByLabelText('Legal name'), { target: { value: 'Alex Example' } })
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'alex@example.test' } })
+    fireEvent.change(screen.getByLabelText('Identity number'), { target: { value: 'ID-123' } })
+    fireEvent.change(screen.getByLabelText('Country'), { target: { value: 'CA' } })
+    fireEvent.change(screen.getByLabelText('Region'), { target: { value: 'CA-BC' } })
+    await waitFor(() => expect((screen.getByRole('button', { name: 'Create animal' }) as HTMLButtonElement).disabled).toBe(false))
+    fireEvent.submit(screen.getByRole('button', { name: 'Create animal' }).closest('form')!)
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({
+      animalName: 'Pluto', animalDocument: photo, ownerDocument: undefined,
+      relationshipDocument: undefined, relationship: 'owner', controllerCountry: 'CA',
+      controllerKind: 'person', controllerEmail: 'alex@example.test',
+    })))
+  })
+
+  it('rejects an animal photo larger than the ICAO 2 MiB maximum', async () => {
+    render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={vi.fn()} />)
+    const oversized = new File([new Uint8Array(2 * 1024 * 1024 + 1)], 'large.jpg', { type: 'image/jpeg' })
+    fireEvent.change(screen.getByRole('button', { name: 'Add animal photo' }).querySelector('input')!, { target: { files: [oversized] } })
+    expect((await screen.findByRole('alert')).textContent).toContain('The image must not exceed 2 MiB.')
+  })
+
+  it('rejects an animal photo below the documented ICAO pixel dimensions', async () => {
+    vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue({ width: 200, height: 200, close: vi.fn() }))
+    render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={vi.fn()} />)
+    fireEvent.change(screen.getByRole('button', { name: 'Add animal photo' }).querySelector('input')!, { target: { files: [new File(['small'], 'small.jpg', { type: 'image/jpeg' })] } })
+    expect((await screen.findByRole('alert')).textContent).toContain('at least 300 × 400 px')
+  })
+
+  it('rejects a horizontal 4:3 image even when it exceeds the minimum dimensions', async () => {
+    vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue({ width: 800, height: 600, close: vi.fn() }))
+    render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={vi.fn()} />)
+    fireEvent.change(screen.getByRole('button', { name: 'Add animal photo' }).querySelector('input')!, { target: { files: [new File(['wide'], 'wide.jpg', { type: 'image/jpeg' })] } })
+    expect((await screen.findByRole('alert')).textContent).toContain('portrait 3:4')
+  })
+
+  it('switches the legal identifier fields from a person to an organization owner', () => {
+    render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={vi.fn()}
+      identifierTypeOptions={{ person: [{ value: 'national_identity_card', label: 'National identity card' }], organization: [{ value: 'business_number', label: 'Business number' }] }}
+    />)
+    fireEvent.click(screen.getByRole('radio', { name: 'Organization' }))
+    expect((screen.getByRole('combobox', { name: 'Identity type' }) as HTMLSelectElement).value).toBe('business_number')
+  })
+
+  it('can be embedded in a host collapsible without repeating its heading', () => {
+    render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={vi.fn()} showHeader={false} footerActions={<button type="button">Cancel</button>} />)
+    expect(screen.queryByRole('heading', { name: 'Create animal' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Create animal' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Cancel' }).parentElement).toBe(screen.getByRole('button', { name: 'Create animal' }).parentElement)
+  })
+
+  it('allows supporting evidence to be omitted while web registration requires phone and email', async () => {
+    vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue({ width: 600, height: 800, close: vi.fn() }))
+    const onSubmit = vi.fn().mockResolvedValue(undefined)
+    render(<AnimalIdentityOnboardingV2 copy={copy} onSubmit={onSubmit} requireEmail requireTelephone countryOptions={[{ value: 'ES', label: 'Espana' }]}/>)
+    fireEvent.change(screen.getByLabelText('Animal name'), { target: { value: 'Luna' } })
+    fireEvent.change(screen.getByLabelText('Identifier'), { target: { value: '981020000123456' } })
+    fireEvent.change(screen.getByLabelText('Legal name'), { target: { value: 'Alex Example' } })
+    fireEvent.change(screen.getByLabelText('Country'), { target: { value: 'ES' } })
+    fireEvent.change(screen.getByLabelText('Identity number'), { target: { value: '12345678Z' } })
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'alex@example.test' } })
+    fireEvent.change(screen.getByLabelText('Telephone'), { target: { value: REPOSITORY_SAFE_EXAMPLES.phoneE164 } })
+    const photo = new File(['photo'], 'luna.jpg', { type: 'image/jpeg' })
+    fireEvent.change(screen.getByRole('button', { name: 'Add animal photo' }).querySelector('input')!, { target: { files: [photo] } })
+    fireEvent.submit(screen.getByRole('button', { name: 'Create animal' }).closest('form')!)
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ ownerDocument: undefined, relationshipDocument: undefined, controllerEmail: 'alex@example.test', controllerTelephone: REPOSITORY_SAFE_EXAMPLES.phoneE164 })))
+  })
+})

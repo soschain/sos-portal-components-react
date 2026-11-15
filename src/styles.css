@@ -1,0 +1,24 @@
+@import 'antifraud-common-components-react/styles.css';
+@import 'antifraud-portal-components-react/styles.css';
+@import './encounter-journey.css';
+@import './clinical/clinical.css';
+@import './care/care.css';
+@import './identity/current-subject.css';
+@import './identity/identity.css';
+
+/* The SOS browser preference adapter selects these neutral document sizes. */
+html[data-density='small'] { font-size: 14px; }
+html[data-density='medium'] { font-size: 16px; }
+html[data-density='large'] { font-size: 18px; }
+
+/* Compatibility names absent from Common point only to its existing tokens.
+   Do not redefine Common base tokens: the reverse bridge would form a cycle. */
+:root, html[data-theme='dark'] {
+  --uhcp-surface: var(--afcc-surface);
+  --uhcp-emerald: var(--afcc-emerald);
+  --uhcp-surface-muted: var(--afcc-panel-muted);
+  --uhcp-accent: var(--afcc-accent);
+  --uhcp-accent-soft: var(--uhcp-surface-accent);
+  --uhcp-action-soft: var(--uhcp-surface-accent);
+  --uhcp-surface-soft: var(--afcc-panel-muted);
+}
