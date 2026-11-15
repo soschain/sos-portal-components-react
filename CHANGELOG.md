@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 - 2026-11-15
 
 - Pin the published Antifraud Common Components 1.3.0 and Antifraud Portal
   Components 0.4.0 releases for the shared shell and controlled identity panels.
