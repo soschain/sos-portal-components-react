@@ -81,9 +81,9 @@ theme/density preference adapter and current-subject context. Its storage namesp
 holds UI preferences only; applications supply their own namespace. The relocated
 DOM forms and shell are web components, not evidence of native Expo compatibility.
 
-The current source cohort requires the unpublished reviewed Antifraud component
-snapshots for its new APIs. Registry pins are updated bottom-up before release;
-baseline registry metadata alone does not make the new APIs publicly available.
+The controlled Antifraud renderers are provided by the published
+`antifraud-common-components-react@1.3.0` and
+`antifraud-portal-components-react@0.4.0` packages.
 
 - This package owns reusable portal presentation and controlled user intents.
 - Applications own branding, routes, environment selection, BFF calls and

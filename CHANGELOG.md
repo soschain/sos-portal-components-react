@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Pin the published Antifraud Common Components 1.3.0 and Antifraud Portal
+  Components 0.4.0 releases for the shared shell and controlled identity panels.
+
 - Own shared clinical editors, document drafts, IPS summary/timeline, card and
   subject workspaces, communications, emergency-task and notification presentation
   using existing FHIR/SOS Data contracts and host-authorized callbacks.
@@ -10,7 +13,7 @@
   without a UHC runtime dependency. Preserve pending evidence and responsibility.
 - Compose the controlled Antifraud shell with SOS current-subject context and
   browser UI preferences; include responsive styles and host-branded card fallback.
-- Validate the reviewed private component cohort: strict types, 45 suites/178
+- Validate the published dependency cohort: strict types, 45 suites/178
   component cases, build, three source/emitted/registry-lock independence checks,
   and all 83 required consumer exports (46 runtime, 36 types and stylesheet).
   Governed fixture corrections retain 17 affected cases. These are component
