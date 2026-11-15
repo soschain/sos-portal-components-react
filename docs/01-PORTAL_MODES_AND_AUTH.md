@@ -41,6 +41,17 @@ start every service for every test.
 | `local-network` acceptance | The same applicable network use case against the local Fabric-backed network profile | No unrelated assistant, terminology or RTC profile |
 | `dev:staging` Test Network acceptance | Local UI/BFF for the chosen configured flavours, real staging identity/authority, online GW and the case's required online services | No automatic promotion of a Demo case into GW onboarding |
 
+### Promotion by access path
+
+For online Demo, pass the relevant LOCAL Demo unit/BFF and real browser
+journeys, install exact published registry dependencies and commit their
+lockfiles, build the owning portals, then deploy the Demo revisions. Verify the
+effective online revisions and report their observed behavior. Online
+`dev:staging`, Fabric and Test Network lifecycle checks are not prerequisites
+for that Demo deployment. They run afterward; fixes repeat the affected local
+checks and redeploy. Demo deployment establishes no Test Network or production
+readiness. Authentication, privacy, custody and dependency boundaries still apply.
+
 For network use cases, establish the memory-backed GW `test` evidence first,
 then local Fabric `local-network`, then the online `dev:staging` Test Network
 journey. Keep the profile names distinct from the Demo access path. Demo
