@@ -14,6 +14,13 @@ the real BFF/SDK/GW lifecycle. Online dedicated RTC does not change that
 boundary, and a call test never implies the lifecycle or child-thread tests
 have passed.
 
+Demo promotion requires the relevant local Demo checks, exact registry
+dependencies/lockfiles and portal build, then online Demo deployment. Run
+`dev:staging`/Test Network lifecycle checks afterward and redeploy fixes; their
+unfinished state does not hold Demo deployment. Do not describe Demo deployment
+as Test Network or production readiness. The owning rule is the shared mode
+contract's access-path promotion subsection.
+
 Apply
 [`preserve-demo-test-network-adapter-parity`](.codex/skills/preserve-demo-test-network-adapter-parity/SKILL.md)
 to every shared workflow. Demo, Test Network, web and Expo render the same
