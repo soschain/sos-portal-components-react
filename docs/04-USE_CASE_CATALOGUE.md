@@ -1,4 +1,4 @@
-# 04 ? Use-case catalogue and migration
+# 04 - Use-case catalogue and migration
 
 The stable IDs below are intended to become Tuskr cases. Execute each journey for its applicable actors, flavours and access paths.
 Record viewport and theme runs as execution variants of that journey. Demo
