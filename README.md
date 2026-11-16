@@ -7,13 +7,13 @@ the application supplies the appropriate trusted backend adapter.
 
 ## Start with the integration guides
 
-1. [Documentation index](docs/00-INDEX.md) ? choose the guide for your task.
-2. [Portal modes and authentication](docs/01-PORTAL_MODES_AND_AUTH.md) ? connect
+1. [Documentation index](docs/00-INDEX.md): choose the guide for your task.
+2. [Portal modes and authentication](docs/01-PORTAL_MODES_AND_AUTH.md): connect
    authentication, storage, providers and protected actions.
-3. [Cross-portal use cases](docs/02-CROSS_PORTAL_TUSKR_CASES.md) ? follow the
+3. [Cross-portal use cases](docs/02-CROSS_PORTAL_TUSKR_CASES.md): follow the
    Personal/Professional journeys and their expected readback and denial checks.
 4. [Clinical sections and US Core](docs/03-CLINICAL_SECTIONS_AND_US_CORE_CONTRACT.md)
-   ? integrate clinical authoring and permission contracts.
+   covers clinical authoring and permission contracts.
 
 Runnable commands, flavour configuration and ports belong in the consuming
 application's README. For a local Demo, start the UI/BFF and memory vault.
