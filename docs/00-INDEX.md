@@ -1,30 +1,31 @@
-# 00 — Shared portal engineering guides
+# 00 ? Shared portal engineering guides
 
-These maintained guides describe the common contract for Personal and
-Professional applications. Product names, logos and deployment hostnames are
-application configuration; human health, animal care, public safety and other
-sectors determine policy and permitted specializations.
+Use these guides when integrating Personal and Professional applications.
+Branding and deployment hosts are application configuration; sector policy
+controls the permitted specializations and actions.
 
-1. [01 — Portal modes, authentication and authority](01-PORTAL_MODES_AND_AUTH.md)
-   explains public Demo login, test-only Firebase phones, BFF-owned Demo
-   persistence, Test Network lifecycle, Confidential Storage and RTC.
-2. [02 — Cross-portal Tuskr cases](02-CROSS_PORTAL_TUSKR_CASES.md) defines
-   actor-to-actor journeys, expected readback, negative checks and execution
-   evidence for the stable `SOS-PORTAL-001`–`SOS-PORTAL-029` catalogue. Section
-   15 defines the complete created-card/contact/Encounter/call/handover journey.
-3. [Package README](../README.md) contains the export/ownership map and the
-   compact use-case catalogue.
-4. [Changelog](../CHANGELOG.md) records dated changes. Email/Teams updates are
-   transient messages, not maintained architecture documents.
+| Task | Guide |
+| --- | --- |
+| Find components and public entry points | [Package README](../README.md) |
+| Configure login, Demo/Network adapters, storage and RTC | [01 ? Portal modes and authentication](01-PORTAL_MODES_AND_AUTH.md) |
+| Integrate device preferences and model preparation | [Device assistance lifecycle](01-PORTAL_MODES_AND_AUTH.md#7-device-assistance-and-ui-preferences) |
+| Find stable case IDs and plan a migration | [04 ? Use-case catalogue](04-USE_CASE_CATALOGUE.md) |
+| Execute Personal/Professional workflows | [02 ? Cross-portal use cases](02-CROSS_PORTAL_TUSKR_CASES.md) |
+| Connect clinical sections, permissions and US Core | [03 ? Clinical sections contract](03-CLINICAL_SECTIONS_AND_US_CORE_CONTRACT.md) |
+| Review dated package changes | [Changelog](../CHANGELOG.md) |
 
-The owning CH applications document runnable commands, configured flavours,
-ports and provider routes in their own numbered README indexes:
+The cross-portal guide retains stable `SOS-PORTAL-001`?`SOS-PORTAL-029` case
+identifiers. Section 15 describes the created-card, contact, Encounter, call and
+handover sequence. Record an execution's exact environment and revision, its
+observed outcome and cleanup. Count user journeys separately from viewport,
+theme, flavour and access-mode variants.
+
+Find runnable commands, ports and configured provider routes in the consuming
+applications:
 
 - [CH Personal](https://github.com/Fundacion-UNID/connect-health-personal-next#readme)
 - [CH Professional](https://github.com/Fundacion-UNID/connect-health-professional-next#readme)
 
-The guides specify acceptance targets. A link, manifest, implemented component
-or numbered Tuskr case does not establish that its end-to-end journey passed.
-Attach the actual environment and revision evidence to each execution.
-
-- [03 — Clinical sections, permissions and US Core contract](03-CLINICAL_SECTIONS_AND_US_CORE_CONTRACT.md)
+The guides define expected behavior; execution records establish which
+journeys passed. Keep current integration instructions here and dated results
+in the changelog or test record. Email and Teams updates are transient messages.
