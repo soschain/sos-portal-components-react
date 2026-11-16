@@ -232,3 +232,29 @@ without retaining credentials or personal data. Resume the smallest failed
 gate and retain green predecessor evidence unless its boundary changed.
 Keep legacy compatibility tests explicitly optional. Put dated results in
 the changelog or test execution; keep these guides as maintained contracts.
+
+## 7. Device assistance and UI preferences
+
+The application shell composes the shared device-assistance renderer and
+supplies localized feature names, enabled state, runtime availability and
+preparation progress. Detect hardware support in the host and explain why a
+feature is unavailable. Persist appearance, text size, locale and device
+preferences in an application-specific UI namespace.
+
+Enabling assistance and preparing a model are separate user actions. Opening
+the page or enabling a feature must not download a model. Begin preparation
+only after the explicit action. On opt-out, stop the worker and invalidate
+pending results so late completions cannot restore disabled output. Keep
+revocation available if an enabled runtime later becomes unavailable.
+
+These account/device choices do not replace account authentication, protected
+profile unlock, subject telephone authorization or microphone permission.
+Resolve each requirement for the operation being performed. Use the same
+controlled component and use-case state in Demo and Test Network, with the
+host selecting the transport and persistence adapter.
+
+See the [Antifraud device-assistance integration guide](https://github.com/antifraudservices/antifraud-portal-components-react/blob/main/docs/DEVICE_ASSISTANCE.md)
+for component props and lifecycle checks. Current device preferences use web
+DOM; native rendering remains pending. Test worker cancellation and late-result
+rejection in the consuming runtime rather than treating component toggles as
+proof of runtime readiness.
