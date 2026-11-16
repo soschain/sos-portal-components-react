@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Scope jurisdiction-specific acceptance to affected flows; keep unrelated Demo
+  and general technology-sector releases independent while retaining mandatory
+  affected regressions and truthful failure reporting.
+
 ## 0.5.0 - 2026-11-15
 
 - Pin the published Antifraud Common Components 1.3.0 and Antifraud Portal
