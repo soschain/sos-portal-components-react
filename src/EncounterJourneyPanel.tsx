@@ -4,9 +4,9 @@ import {EncounterClaim as E,EncounterHistoryClaim as H} from 'fhir-data-utils-ts
 import {EncounterTransferConsole,type EncounterTransferConsoleCopy,type EncounterSourceOutcome,type EncounterTransferStage} from './EncounterTransferConsole.js'
 
 export const ENCOUNTER_TRANSFER_COPY_EN:EncounterTransferConsoleCopy={
-  patientSearchTitle:'Find a patient',scanQr:'Scan QR',patientId:'Card identifier',search:'Find card',journeyTitle:'Service stages',
-  sourceTitle:'Current service',destinationTitle:'Destination service',returning:'Patient will return',returningHint:'Keep the current service on hold.',
-  notReturning:'Patient will not return',notReturningHint:'Complete the current service.',transferTo:'Transfer to',reviewChanges:'Review changes',applyTransfer:'Confirm transfer',
+  patientSearchTitle:'Find an individual',scanQr:'Scan QR',patientId:'Card identifier',search:'Find card',journeyTitle:'Service stages',
+  sourceTitle:'Current service',destinationTitle:'Destination service',returning:'Individual will return',returningHint:'Keep the current service on hold.',
+  notReturning:'Individual will not return',notReturningHint:'Complete the current service.',transferTo:'Transfer to',reviewChanges:'Review changes',applyTransfer:'Confirm transfer',
   emergencyActions:'Emergency contacts',call:'Call',videoCall:'Video call',sendMessage:'Send message',text:'Text',audio:'Audio',messageLabel:'Message',attach:'Attach',pdf:'PDF',fhirBundle:'FHIR Bundle',calendar:'Calendar',send:'Send',
   resourceSummary:'Transfer changes',sourceUpdate:'Update source',sourceHistory:'Record source history',destinationUpdate:'Update destination',destinationHistory:'Record destination history',indexProjection:'Project continuity',
   demoWarning:'Synthetic Demo data',helpTitle:'What happens to the previous service?',helpBody:'A temporary move keeps it on hold. A definitive move completes it. The destination starts only after the transfer is confirmed.',

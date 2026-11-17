@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Use individual-neutral English defaults in the shared Encounter transfer
+  journey for human and animal subjects. Preserve caller copy overrides,
+  authorized transfer intent and the normal console's hidden legacy tools.
+
 - Compose one public-registry discovery workflow for Personal and Professional:
   injected authenticated search, explicit ephemeral location consent, selectable
   radius, manual fallback and straight-line distance labels. Share the Antifraud

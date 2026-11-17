@@ -15,6 +15,24 @@ const record={revision:1,allowedStatuses:[S.InProgress],entry:buildFlatClaimReso
 const view:PortalEncounterJourneyView={subjectIdentifier:f.subjectReference,canManage:true,services:[service],encounters:[record],history:[]}
 afterEach(cleanup)
 
+it('uses individual-neutral default transfer copy for human and animal subjects',()=>{
+ const active={...record,revision:2,entry:{...record.entry,claims:{...record.entry.claims,[E.Status]:S.InProgress,[E.ServiceProvider]:service.organizationReference}}}
+ const target={...service,reference:f.destination.serviceReference,label:'Assessment service'}
+ for(const subjectLabel of ['Individual','Animal']){
+  const onCommand=vi.fn()
+  const host=render(<ui.EncounterJourneyPanel subjectLabel={subjectLabel} view={{...view,services:[service,target],encounters:[active]}} onCommand={onCommand}/>)
+  fireEvent.click(screen.getByRole('button',{name:'Transfer to another service'}))
+  expect(screen.getByRole('radio',{name:/^Individual will return\b/})).toBeTruthy()
+  expect(screen.getByRole('radio',{name:/^Individual will not return\b/})).toBeTruthy()
+  expect(screen.queryByText(/^Patient will(?: not)? return$/)).toBeNull()
+  expect(ui.ENCOUNTER_TRANSFER_COPY_EN.patientSearchTitle).toBe('Find an individual')
+  // Normal journey hosts keep illustrative search tools hidden.
+  expect(screen.queryByRole('button',{name:'Find card'})).toBeNull()
+  expect(onCommand).not.toHaveBeenCalled()
+  host.unmount()
+ }
+})
+
 it('keeps a patient/family view read-only even when a mutation callback is supplied',()=>{
   const onCommand=vi.fn()
   render(<ui.EncounterJourneyPanel subjectLabel={f.subjectReference} view={{...view,canManage:false}} onCommand={onCommand}/>)
