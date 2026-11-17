@@ -24,3 +24,4 @@ export {
   type ProfileProtectionTargetV2, type ProfileProtectionCopyV2,
   type PortalUiDensity, type PortalUiTheme,
 } from 'antifraud-common-components-react'
+export * from './PublicRegistryDiscovery.js'

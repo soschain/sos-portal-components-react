@@ -7,6 +7,10 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
+    "./public-registry-discovery": {
+      "types": "./dist/PublicRegistryDiscovery.d.ts",
+      "default": "./dist/PublicRegistryDiscovery.js"
+    },
     "./identity": {
       "types": "./dist/identity/index.d.ts",
       "default": "./dist/identity/index.js"

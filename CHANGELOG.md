@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Compose one public-registry discovery workflow for Personal and Professional:
+  injected authenticated search, explicit ephemeral location consent, selectable
+  radius, manual fallback and straight-line distance labels. Share the Antifraud
+  controlled renderer without selecting persistence or a paid maps provider.
+
 - Scope jurisdiction-specific acceptance to affected flows; keep unrelated Demo
   and general technology-sector releases independent while retaining mandatory
   affected regressions and truthful failure reporting.
