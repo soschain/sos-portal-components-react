@@ -86,3 +86,13 @@ acceptance targets, specialist ownership and the migration sequence. Use the
 [cross-portal guide](docs/02-CROSS_PORTAL_TUSKR_CASES.md) for executable steps
 and expected outcomes. Record which journeys passed and list their execution
 variants separately.
+### Real public registry discovery
+
+`sos-portal-components-react/public-registry-discovery` exports
+`PublicRegistryDiscovery` and `createPublicRegistrySearch`. Both portal
+audiences inject authenticated transport and localized copy into this one
+workflow. Browser location is opt-in, retained only in component state and
+clearable; denied location preserves manual search. The Antifraud controlled
+renderer distinguishes public registry evidence from membership or published
+services. Access mode never turns a real registry entry into a synthetic
+clinic or a bookable service.
