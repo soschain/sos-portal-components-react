@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.5.1 - 2026-11-17
+
+- Align the reviewed Data runtime and exact dependency assertions with public
+  SOS Data 0.8.3, FHIR 0.7.2, Antifraud Common 1.3.1 and Antifraud Portal 0.4.1.
+  Preserve strict declaration/runtime equality and the existing renderer code.
+
 - Keep the normal Encounter journey content-sized, omit unavailable stage and
   history timestamps, and hide rail navigation for a single recorded stage.
   Collapse secondary creation after records exist while preserving empty-state

@@ -1,6 +1,6 @@
 {
   "name": "sos-portal-components-react",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Shared portal UI for base components",
   "license": "Apache-2.0",
   "type": "module",
@@ -102,10 +102,10 @@
     }
   },
   "dependencies": {
-    "antifraud-common-components-react": "1.3.0",
-    "antifraud-portal-components-react": "0.4.0",
-    "fhir-data-utils-ts": "0.7.0",
-    "sos-data-utils-ts": "0.7.0",
+    "antifraud-common-components-react": "1.3.1",
+    "antifraud-portal-components-react": "0.4.1",
+    "fhir-data-utils-ts": "0.7.2",
+    "sos-data-utils-ts": "0.8.3",
     "terminology-components-react": "0.2.0"
   },
   "devDependencies": {
