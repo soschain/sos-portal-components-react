@@ -4,7 +4,7 @@ import React from 'react'
 import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react'
 import {afterEach,expect,it,vi} from 'vitest'
 import * as ui from '../src/index.js'
-import {EncounterClaim as E,EncounterStatusR5 as S} from 'fhir-data-utils-ts/claims'
+import {EncounterClaim as E,EncounterHistoryClaim as H,EncounterStatusR5 as S} from 'fhir-data-utils-ts/claims'
 import {SOSCHAIN_DEMO_ORGANIZATIONS} from 'sos-data-utils-ts/portal-access-profiles'
 import {FHIR_ENCOUNTER_TRANSFER_TEST_DATA as f} from 'fhir-data-utils-ts/data'
 import {buildFlatClaimResourceEntry} from 'fhir-data-utils-ts/flat-claim-resource-graph'
@@ -42,6 +42,29 @@ it('keeps a patient/family view read-only even when a mutation callback is suppl
   expect(screen.queryByRole('button',{name:'Transfer to another service'})).toBeNull()
   expect(onCommand).not.toHaveBeenCalled()
 })
+
+it('keeps secondary Encounter creation collapsed when records exist and primary empty-state creation available',()=>{
+ const onCommand=vi.fn()
+ const host=render(<ui.EncounterJourneyPanel subjectLabel="Individual" view={view} onCommand={onCommand}/>)
+ const create=screen.getByRole('button',{name:'Create encounter',hidden:true})
+ const disclosure=create.closest('details')
+ expect(disclosure).not.toBeNull()
+ expect(disclosure?.open).toBe(false)
+ expect(disclosure?.querySelector('summary')?.textContent).toBe('Create encounter')
+ expect(onCommand).not.toHaveBeenCalled()
+ host.unmount()
+ render(<ui.EncounterJourneyPanel subjectLabel="Individual" view={{...view,encounters:[]}} onCommand={onCommand}/>)
+ expect(screen.getByRole('button',{name:'Create encounter'}).closest('details')).toBeNull()
+ expect(screen.getByText('No encounters have been recorded for this card.')).toBeTruthy()
+})
+it('keeps actual history collapsed without rendering a missing history timestamp',()=>{
+ const history={revision:1,entry:buildFlatClaimResourceEntry({resourceType:'EncounterHistory',entryId:f.source.id+'-history',claims:{[H.Encounter]:record.entry.reference,[H.Subject]:f.subjectReference,[H.Status]:S.Planned,[H.ServiceType]:service.reference}})}
+ const host=render(<ui.EncounterJourneyPanel subjectLabel="Individual" view={{...view,canManage:false,history:[history]}}/>)
+ const disclosure=screen.getByText('Encounter history',{selector:'summary'}).closest('details')
+ expect(disclosure?.open).toBe(false)
+ expect(host.container.querySelectorAll('[data-encounter-history]')).toHaveLength(1)
+ expect(disclosure?.querySelector('time')).toBeNull()
+})
 it('uses the exact persisted Encounter/revision and only server-provided status options',async()=>{
   const updated={...record,revision:2,entry:{...record.entry,claims:{...record.entry.claims,[E.Status]:S.InProgress}}}
   const onCommand=vi.fn(async(_command:PortalEncounterRequest)=>({journey:{...view,encounters:[updated]},affectedEncounterReferences:[record.entry.reference]}))
@@ -61,6 +84,7 @@ it('retries the identical command after an interrupted response without assuming
     return {journey:{...view,encounters:[record,created]},affectedEncounterReferences:[created.entry.reference]}
   })
   render(<ui.EncounterJourneyPanel subjectLabel={f.subjectReference} view={view} onCommand={onCommand}/>)
+  fireEvent.click(screen.getByText('Create encounter',{selector:'summary'}))
   fireEvent.click(screen.getByRole('button',{name:'Create encounter'}))
   await waitFor(()=>expect(screen.getByRole('alert')).toBeTruthy())
   expect(screen.queryByText('Change confirmed')).toBeNull()

@@ -121,7 +121,7 @@ export function EncounterTransferConsole({ copy, patientDisplay, encounters, sou
     }
   }
 
-  return <section className="uhcp-transfer-console" style={legacyTools?undefined:{gridTemplateColumns:'minmax(0,1fr)',minHeight:'auto'}}>
+  return <section className={`uhcp-transfer-console${legacyTools?'':' uhcp-transfer-console--compact'}`}>
     {legacyTools&&<aside className="uhcp-transfer-contacts">
       <details open>
         <summary>{copy.emergencyActions}</summary>
@@ -160,7 +160,7 @@ export function EncounterTransferConsole({ copy, patientDisplay, encounters, sou
       </header>}
 
       <section className="uhcp-transfer-journey" role="region" aria-label={copy.journeyTitle} aria-describedby={readOnly?undefined:helpId}>
-        <header><h2>{copy.journeyTitle}</h2><div><button type="button" aria-label="Anterior" onClick={() => railRef.current?.scrollBy({ left: -260, behavior: 'smooth' })}><Icon name="chevron"/></button><button type="button" aria-label="Siguiente" onClick={() => railRef.current?.scrollBy({ left: 260, behavior: 'smooth' })}><Icon name="chevron"/></button></div></header>
+        <header><h2>{copy.journeyTitle}</h2>{encounters.length>1&&<div><button type="button" aria-label="Anterior" onClick={() => railRef.current?.scrollBy({ left: -260, behavior: 'smooth' })}><Icon name="chevron"/></button><button type="button" aria-label="Siguiente" onClick={() => railRef.current?.scrollBy({ left: 260, behavior: 'smooth' })}><Icon name="chevron"/></button></div>}</header>
         <div className="uhcp-transfer-rail" ref={railRef}>
           {history.map((item) => <EncounterCard key={item.identifier} encounter={item}/>) }
           {source ? <article className="uhcp-transfer-card uhcp-transfer-source">
@@ -171,9 +171,9 @@ export function EncounterTransferConsole({ copy, patientDisplay, encounters, sou
             </fieldset>}
           </article> : null}
           {(destination||destinationPreview)&&<div className="uhcp-transfer-arrow"><span>{copy.transferTo}</span><i/><Icon name="chevron"/></div>}
-          {destination ? <article className="uhcp-transfer-card uhcp-transfer-destination"><h3>{copy.destinationTitle}</h3><EncounterCardBody encounter={destination} {...(legacyTools?{identifierLabel:copy.encounterIdentifier}:{})}/></article> : destinationPreview?<article className="uhcp-transfer-card uhcp-transfer-destination"><h3>{copy.destinationTitle}</h3><strong>{destinationPreview.serviceLabel}</strong><p>{destinationPreview.locationLabel}</p></article>:null}
+          {destination ? <article className="uhcp-transfer-card uhcp-transfer-destination"><h3>{copy.destinationTitle}</h3><EncounterCardBody encounter={destination} {...(legacyTools?{identifierLabel:copy.encounterIdentifier}:{})}/></article> : destinationPreview?<article className="uhcp-transfer-card uhcp-transfer-destination"><h3>{copy.destinationTitle}</h3><strong>{destinationPreview.serviceLabel}</strong>{destinationPreview.locationLabel&&<p>{destinationPreview.locationLabel}</p>}</article>:null}
         </div>
-        {!readOnly&&<details className="uhcp-transfer-help" open><summary id={helpId}>{copy.helpTitle}</summary><p>{copy.helpBody}</p></details>}
+        {!readOnly&&<details className="uhcp-transfer-help" open={legacyTools}><summary id={helpId}>{copy.helpTitle}</summary><p>{copy.helpBody}</p></details>}
         {!readOnly&&<div className="uhcp-transfer-controls">{legacyTools&&<button type="button" onClick={() => { setShowTechnical(true); setStatus(copy.reviewReady) }}>{copy.reviewChanges}</button>}<button className="uhcp-transfer-primary" type="button" disabled={!onApplyTransfer||transferSync === 'submitting'} onClick={() => void applyTransfer()}>{transferSync === 'retryable' ? copy.retryTransfer : copy.applyTransfer}</button></div>}
       </section>
 
@@ -193,5 +193,5 @@ function EncounterCard({ encounter }: Readonly<{ encounter: EncounterTransferSta
 }
 
 function EncounterCardBody({ encounter, identifierLabel }: Readonly<{ encounter: EncounterTransferStage; identifierLabel?: string }>) {
-  return <div className="uhcp-transfer-card-body"><time>{encounter.arrivedAt}</time><strong>{encounter.serviceLabel}</strong>{encounter.locationLabel ? <span>{encounter.locationLabel}</span> : null}<small data-status={encounter.status}>{encounter.status}</small>{(identifierLabel||encounter.displayIdentifier)&&<code aria-label={identifierLabel}>{encounter.displayIdentifier ?? encounter.identifier}</code>}</div>
+  return <div className="uhcp-transfer-card-body">{encounter.arrivedAt.trim()&&<time dateTime={encounter.arrivedAt}>{encounter.arrivedAt}</time>}<strong>{encounter.serviceLabel}</strong>{encounter.locationLabel ? <span>{encounter.locationLabel}</span> : null}<small data-status={encounter.status}>{encounter.status}</small>{(identifierLabel||encounter.displayIdentifier)&&<code aria-label={identifierLabel}>{encounter.displayIdentifier ?? encounter.identifier}</code>}</div>
 }

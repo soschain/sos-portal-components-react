@@ -63,12 +63,13 @@ export function EncounterJourneyPanel({subjectLabel,view,onCommand,onRefresh,cop
     const command:PortalEncounterRequest=pending?.action==='transfer'?pending:{action:'transfer',operationId:crypto.randomUUID(),encounterReference:selected.entry.reference,expectedRevision:selected.revision,destinationServiceReference:destination.reference,sourceOutcome:outcome as S.OnHold|S.Completed}
     try{await execute(command);return {state:'confirmed' as const}}catch{return {state:'retryable' as const}}
   }
+  const createForm=canManage&&service?<form onSubmit={event=>{event.preventDefault();void execute({action:'create',operationId:crypto.randomUUID(),serviceReference:service.reference}).catch(()=>{})}}>
+    <label>{copy.service}<select aria-label={copy.service} value={service.reference} disabled={blocked} onChange={event=>setServiceReference(event.target.value)}>{view.services.map(item=><option key={item.reference} value={item.reference}>{item.label}</option>)}</select></label>
+    <button type="submit" disabled={blocked}>{copy.create}</button>
+  </form>:null
   return <section className="sos-encounter-journey" role="region" aria-label={copy.title}>
     <header><div><h2>{copy.title}</h2><p>{subjectLabel}</p></div>{onRefresh&&<button type="button" disabled={busy} onClick={()=>void onRefresh().then(()=>{retry.current=null;setError('');setNotice('')}).catch(reason=>setError(String(reason)))}>{copy.refresh}</button>}</header>
-    {canManage&&service&&<form onSubmit={event=>{event.preventDefault();void execute({action:'create',operationId:crypto.randomUUID(),serviceReference:service.reference}).catch(()=>{})}}>
-      <label>{copy.service}<select aria-label={copy.service} value={service.reference} disabled={blocked} onChange={event=>setServiceReference(event.target.value)}>{view.services.map(item=><option key={item.reference} value={item.reference}>{item.label}</option>)}</select></label>
-      <button type="submit" disabled={blocked}>{copy.create}</button>
-    </form>}
+    {createForm&&(view.encounters.length?<details className="sos-encounter-create"><summary>{copy.create}</summary>{createForm}</details>:createForm)}
     {!view.encounters.length?<p>{copy.empty}</p>:<>
       {canManage&&selected&&<div className="sos-encounter-actions"><label>{copy.encounter}<select aria-label={copy.encounter} value={selected.entry.reference} disabled={blocked} onChange={event=>{setSelectedReference(event.target.value);setTransferOpen(false)}}>{stages.filter(item=>manageable.some(row=>row.entry.reference===item.identifier)).map(item=><option key={item.identifier} value={item.identifier}>{item.serviceLabel} · {item.status}</option>)}</select></label>
         {statuses.map(status=><button key={status} type="button" disabled={blocked} onClick={()=>void execute({action:'status',operationId:crypto.randomUUID(),encounterReference:selected.entry.reference,expectedRevision:selected.revision,status}).catch(()=>{})}>{statusLabel(status)}</button>)}
@@ -79,7 +80,10 @@ export function EncounterJourneyPanel({subjectLabel,view,onCommand,onRefresh,cop
         {...(transferOpen&&destination?{destinationPreview:{serviceLabel:destination.label}}:{})}
         {...(canManage&&transferOpen?{onApplyTransfer:transfer}:{})}/>
     </>}
-    {view.history.length>0&&<details><summary>{copy.history}</summary><ol>{view.history.map(row=><li key={row.entry.reference} data-encounter-history={row.entry.claims[H.Encounter]}><time>{row.entry.claims[H.ActualPeriodStart]}</time> · {row.entry.claims[H.Status]} · {row.serviceLabel||view.services.find(service=>service.reference===row.entry.claims[H.ServiceType])?.label||'Other organization encounter'}</li>)}</ol></details>}
+    {view.history.length>0&&<details><summary>{copy.history}</summary><ol>{view.history.map(row=>{
+      const startedAt=row.entry.claims[H.ActualPeriodStart]
+      return <li key={row.entry.reference} data-encounter-history={row.entry.claims[H.Encounter]}>{startedAt?.trim()&&<><time dateTime={startedAt}>{startedAt}</time> · </>}{row.entry.claims[H.Status]} · {row.serviceLabel||view.services.find(service=>service.reference===row.entry.claims[H.ServiceType])?.label||'Other organization encounter'}</li>
+    })}</ol></details>}
     {error&&<p role="alert">{error}</p>}
     {canManage&&error&&retry.current&&<button type="button" disabled={busy} onClick={()=>void execute(retry.current!).catch(()=>{})}>{copy.retry}</button>}
     {notice&&<p role="status">{notice}</p>}

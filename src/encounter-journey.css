@@ -74,11 +74,21 @@
 .uhcp-transfer-review details { font-size:.68rem; }
 .uhcp-transfer-review summary { color:var(--uhcp-text,#60738c); cursor:pointer; }
 .uhcp-transfer-status { background:var(--uhcp-surface-muted,#dff6e8); border-radius:.45rem; color:var(--uhcp-text,#087a47); font-weight:750; padding:.75rem; }
+.uhcp-transfer-console--compact { grid-template-columns:minmax(0,1fr); min-height:0; }
+.uhcp-transfer-console--compact .uhcp-transfer-main { min-width:0; padding:0; }
+.uhcp-transfer-console--compact .uhcp-transfer-journey { margin-top:0; padding:.75rem; }
+.uhcp-transfer-console--compact .uhcp-transfer-rail { align-items:flex-start; min-height:0; padding:.75rem 0; }
+.uhcp-transfer-console--compact .uhcp-transfer-card { flex:0 0 min(16rem,100%); min-height:0; }
+.uhcp-transfer-console--compact .uhcp-transfer-card-body { gap:.35rem; padding:.75rem; overflow-wrap:anywhere; }
+.uhcp-transfer-console--compact .uhcp-transfer-card-body small[data-status=planned] { background:var(--uhcp-surface-muted,#edf2f5); color:var(--uhcp-text,#466079); }
 @media(max-width:900px){.uhcp-transfer-console{grid-template-columns:1fr}.uhcp-transfer-contacts{border-bottom:1px solid #dce5ec;border-inline-end:0}.uhcp-transfer-contact-actions{grid-template-columns:repeat(3,1fr)}.uhcp-transfer-patient>div{grid-template-columns:1fr}.uhcp-transfer-patient>div>span{display:none}.uhcp-transfer-review>header{align-items:flex-start;gap:.7rem;flex-direction:column}}
 @media(max-width:560px){.uhcp-transfer-main{padding:.55rem}.uhcp-transfer-contact-actions{grid-template-columns:1fr}.uhcp-transfer-rail{align-items:stretch}.uhcp-transfer-review li{grid-template-columns:1.8rem 1fr}.uhcp-transfer-review li details{grid-column:2}.uhcp-transfer-controls button{flex:1}.uhcp-transfer-review header p{font-size:.65rem}}
 
 .sos-encounter-journey { min-width:0; color:var(--uhcp-text,inherit); border:1px solid var(--uhcp-border,#dce5ec); border-radius:1rem; padding:clamp(.75rem,2vw,1.5rem); }
-.sos-encounter-journey>header,.sos-encounter-journey>form,.sos-encounter-actions { display:flex; align-items:center; flex-wrap:wrap; gap:.75rem; margin-bottom:1rem; }
+.sos-encounter-journey>header,.sos-encounter-journey>form,.sos-encounter-create>form,.sos-encounter-actions { display:flex; align-items:center; flex-wrap:wrap; gap:.75rem; margin-bottom:1rem; }
+.sos-encounter-create { margin-bottom:.75rem; }
+.sos-encounter-create>summary { cursor:pointer; font-weight:650; padding:.4rem 0; }
+.sos-encounter-create>form { margin-top:.5rem; }
 .sos-encounter-journey>header { justify-content:space-between; }
 .sos-encounter-journey h2 { margin:0; font-size:1.25rem; }
 .sos-encounter-journey label { display:grid; gap:.35rem; min-width:0; }

@@ -6,6 +6,8 @@ import {afterEach,expect,it,vi} from 'vitest'
 import * as shared from '../src/index.js'
 import type {EncounterTransferConsoleCopy} from '../src/EncounterTransferConsole.js'
 import {SOSCHAIN_PERSONAL_DEMO_HOUSEHOLD} from 'sos-data-utils-ts/portal-demo-fixtures'
+import {readFileSync} from 'node:fs'
+import {resolve} from 'node:path'
 
 // Label keys themselves are the exact controlled-copy contract under test.
 const keys='patientSearchTitle scanQr patientId search journeyTitle sourceTitle destinationTitle returning returningHint notReturning notReturningHint transferTo reviewChanges applyTransfer emergencyActions call videoCall sendMessage text audio messageLabel attach pdf fhirBundle calendar send resourceSummary sourceUpdate sourceHistory destinationUpdate destinationHistory indexProjection demoWarning helpTitle helpBody transferReady messageReady callReady videoReady patientReady reviewReady attachmentReady technicalDetails encounterIdentifier transferPending retryTransfer transferRejected'.split(' ')
@@ -21,6 +23,35 @@ it('shows actual planned state and removes all mutation and simulated controls f
   expect(screen.queryByRole('button',{name:copy.scanQr})).toBeNull()
   expect(screen.queryByRole('button',{name:copy.call})).toBeNull()
   expect(screen.queryByRole('radio')).toBeNull()
+})
+it('shows one real planned stage without navigation controls or an empty time element',()=>{
+ const host=render(<shared.EncounterTransferConsole copy={copy} patientDisplay={subject.nickname} encounters={encounters} sourceEncounterId="" destinationEncounterId="" contacts={[]} readOnly/>)
+ expect(screen.getByText('planned')).toBeTruthy()
+ expect(host.container.querySelectorAll('.uhcp-transfer-card')).toHaveLength(1)
+ expect(host.container.querySelector('time')).toBeNull()
+ expect(screen.queryByRole('button',{name:'Anterior'})).toBeNull()
+ expect(screen.queryByRole('button',{name:'Siguiente'})).toBeNull()
+ expect(screen.queryByRole('button',{name:copy.applyTransfer})).toBeNull()
+})
+it('does not reserve full-screen rail or card height for the normal one-stage read view',()=>{
+ const style=document.createElement('style')
+ style.textContent=readFileSync(resolve(process.cwd(),'src/encounter-journey.css'),'utf8')
+ document.head.append(style)
+ try{
+  const host=render(<shared.EncounterTransferConsole copy={copy} patientDisplay={subject.nickname} encounters={encounters} sourceEncounterId="" destinationEncounterId="" contacts={[]} readOnly/>)
+  const rail=host.container.querySelector('.uhcp-transfer-rail')!,card=host.container.querySelector('.uhcp-transfer-card')!
+  expect(getComputedStyle(rail).minHeight).toMatch(/^0(?:px)?$/)
+  expect(getComputedStyle(card).minHeight).toMatch(/^0(?:px)?$/)
+ }finally{style.remove()}
+})
+it('retains three actual stages, their statuses and bounded rail navigation without inventing times',()=>{
+ const stages=[encounters[0]!,{...encounters[0]!,identifier:subject.uhcId+'-second',serviceLabel:'Assessment',arrivedAt:'2026-11-17T10:00:00Z',status:'in-progress' as const},{...encounters[0]!,identifier:subject.uhcId+'-third',serviceLabel:'Follow-up',arrivedAt:'2026-11-17T11:00:00Z',status:'completed' as const}]
+ const host=render(<shared.EncounterTransferConsole copy={copy} patientDisplay={subject.nickname} encounters={stages} sourceEncounterId="" destinationEncounterId="" contacts={[]} readOnly/>)
+ expect(host.container.querySelectorAll('.uhcp-transfer-card')).toHaveLength(3)
+ expect(screen.getByText('planned')).toBeTruthy();expect(screen.getByText('in-progress')).toBeTruthy();expect(screen.getByText('completed')).toBeTruthy()
+ expect(host.container.querySelectorAll('time')).toHaveLength(2)
+ expect(screen.getByRole('button',{name:'Anterior'})).toBeTruthy();expect(screen.getByRole('button',{name:'Siguiente'})).toBeTruthy()
+ expect(screen.queryByRole('radio')).toBeNull()
 })
 it('does not report a transfer as confirmed without a host handler',()=>{
   render(<shared.EncounterTransferConsole copy={copy} patientDisplay={subject.nickname} encounters={encounters} sourceEncounterId={subject.uhcId} destinationEncounterId="" contacts={[]} />)
