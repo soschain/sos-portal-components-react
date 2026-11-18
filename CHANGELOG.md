@@ -1,9 +1,15 @@
 # Changelog
 
-## Unreleased
+## 0.5.2
 
-- Align the shared clinical preview with FHIR Data 0.8.0 and SOS Data 0.8.4,
+- Show supported clinical records in an explicit collection without a Composition,
+  including minimized SHC vaccinations, through the existing resource projector.
+  These display groups assign no IPS section membership or section actions;
+  a supplied Composition retains control of its referenced records.
+
+- Align the shared clinical preview with FHIR Data 0.8.1 and SOS Data 0.8.5,
   including readable clinical codes when a document has no display label.
+- Consume Antifraud Portal 0.4.2 credential QR capture for the clinical journeys.
 
 ## 0.5.1 - 2026-11-17
 

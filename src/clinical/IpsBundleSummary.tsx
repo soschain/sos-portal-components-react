@@ -1,7 +1,11 @@
 import type { ReactNode } from 'react'
+import { FhirIpsClinicalArtifactTypes, ResourceTypesFhirR4 } from 'fhir-data-utils-ts'
 import {
+  toClinicalResourceCardView,
   toClinicalSectionViews,
   type ClinicalResourceBundleLike,
+  type ClinicalResourceDisplayOptions,
+  type ClinicalResourceEntryLike,
   type ClinicalSectionView,
   type ClinicalTerminologyTranslationInput,
 } from 'fhir-data-utils-ts/clinical-resource-view'
@@ -35,6 +39,8 @@ export type IpsBundleSummaryProps = Readonly<{
  *
  * The shared clinical reader owns Bundle traversal, section placement and card
  * projection. `Composition.section.entry` is authoritative for placement;
+ * an explicit collection without a Composition uses resource-type display groups
+ * for the existing supported clinical kinds, without assigning IPS membership.
  * native FHIR fields or canonical `resource.meta.claims` provide card content.
  * This component performs no ingestion, persistence or GW call.
  */
@@ -52,7 +58,13 @@ export function IpsBundleSummary({
   resourceActions,
   timeline,
 }: IpsBundleSummaryProps) {
-  const sections = toClinicalSectionViews(bundle, { ...(locale === undefined ? {} : { locale }), ...(translateCode === undefined ? {} : { translateCode }) })
+  const entries = bundle.entry ?? bundle.data ?? []
+  const displayOptions = { ...(locale === undefined ? {} : { locale }), ...(translateCode === undefined ? {} : { translateCode }) }
+  const collectionWithoutComposition = bundle.type === 'collection'
+    && !entries.some(entry => entry.resource?.resourceType === ResourceTypesFhirR4.Composition)
+  const sections = (collectionWithoutComposition
+    ? collectionResourceGroups(entries, displayOptions, resourceTypeLabel)
+    : toClinicalSectionViews(bundle, displayOptions))
     .filter(section => !hideEmptySections || section.resources.length > 0)
   const nativeResources = new Map((bundle.entry ?? bundle.data ?? []).flatMap((entry) =>
     entry.fullUrl && entry.resource ? [[entry.fullUrl, entry.resource] as const] : [],
@@ -116,13 +128,35 @@ export function IpsBundleSummary({
           }})}
           emptyLabel={emptyLabel}
           {...(resourceTypeLabel === undefined ? {} : { resourceTypeLabel })}
-          actions={sectionActions?.(section)}
+          actions={collectionWithoutComposition ? undefined : sectionActions?.(section)}
           {...(locale === undefined ? {} : { locale })}
           {...(timeZone === undefined ? {} : { timeZone })}
         />
       ))}
     </div>
   )
+}
+
+const collectionClinicalTypes: ReadonlySet<string> = new Set(Object.values(FhirIpsClinicalArtifactTypes))
+
+/** Presentation groups only: no Composition, LOINC section code or section mutation is inferred. */
+function collectionResourceGroups(
+  entries: readonly ClinicalResourceEntryLike[],
+  options: ClinicalResourceDisplayOptions,
+  resourceTypeLabel?: (resourceType: string) => string,
+): ClinicalSectionView[] {
+  const groups = new Map<string, ClinicalSectionView>()
+  for (const entry of entries) {
+    const resourceType = entry.resource?.resourceType
+    if (!resourceType || !collectionClinicalTypes.has(resourceType)) continue
+    let group = groups.get(resourceType)
+    if (!group) {
+      group = { title: resourceTypeLabel?.(resourceType) ?? resourceType, resources: [], unresolvedReferences: [] }
+      groups.set(resourceType, group)
+    }
+    group.resources.push(toClinicalResourceCardView(entry, options))
+  }
+  return [...groups.values()]
 }
 
 function uniqueOptions(options: readonly Readonly<{ id: string; label: string }>[]): readonly Readonly<{ id: string; label: string }>[] {
