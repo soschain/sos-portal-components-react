@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Align the shared clinical preview with FHIR Data 0.8.0 and SOS Data 0.8.4,
+  including readable clinical codes when a document has no display label.
+
 ## 0.5.1 - 2026-11-17
 
 - Align the reviewed Data runtime and exact dependency assertions with public
