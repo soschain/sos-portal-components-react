@@ -25,3 +25,4 @@ export {
   type PortalUiDensity, type PortalUiTheme,
 } from 'antifraud-common-components-react'
 export * from './PublicRegistryDiscovery.js'
+export * from './PublicOfferingDiscovery.js'
