@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.4
+
 - Compose one public catalogue discovery controller over the Antifraud renderer
   for Personal/Professional and Demo/Network. Inject transport, retain optional
   ISO geography, ignore obsolete responses and expose explicit loading/error
