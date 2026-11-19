@@ -86,6 +86,16 @@ acceptance targets, specialist ownership and the migration sequence. Use the
 [cross-portal guide](docs/02-CROSS_PORTAL_TUSKR_CASES.md) for executable steps
 and expected outcomes. Record which journeys passed and list their execution
 variants separately.
+### Public product and service discovery
+
+`sos-portal-components-react/public-offering-discovery` exports
+`PublicOfferingDiscovery` and `createPublicOfferingCatalogLoader`. Both portal
+audiences inject the public feed transport, sector/category options and copy.
+The host chooses the Demo or Network endpoint; the renderer and state machine
+are identical. Discovery needs no subject selection. Optional `renderServices`
+composes existing subject-authorised clinical actions using the same query.
+This web DOM component does not establish native/Expo rendering support.
+
 ### Real public registry discovery
 
 `sos-portal-components-react/public-registry-discovery` exports

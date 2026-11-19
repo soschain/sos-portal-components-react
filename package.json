@@ -36,6 +36,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./public-offering-discovery": {
+      "types": "./dist/PublicOfferingDiscovery.d.ts",
+      "default": "./dist/PublicOfferingDiscovery.js"
+    },
     "./subject-conversation-chat": {
       "types": "./dist/SubjectConversationChat.d.ts",
       "default": "./dist/SubjectConversationChat.js"
@@ -102,6 +106,7 @@
     }
   },
   "dependencies": {
+    "antifraud-data-utils-ts": "0.4.2",
     "antifraud-common-components-react": "1.3.1",
     "antifraud-portal-components-react": "0.4.2",
     "fhir-data-utils-ts": "0.8.1",

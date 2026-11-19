@@ -79,6 +79,33 @@ the Antifraud Controller application; its controlled UI must be exported by
 the Antifraud Hosting component package before CH can remove its final local
 group adapter.
 
+## Public offering catalogue discovery
+
+Both audiences browse sector, category, optional availability country and
+subdivision, then product/service names or distributors. One product card owns
+multiple territorial offers; selecting another country clears the subdivision.
+Grid/list changes presentation without changing catalogue identity. Offers
+describe delivery, operation and support independently. Discovery does not
+grant access to subject data or turn an admitted organisation into a verified
+product. Hosts select separate Demo/Network feeds through injected transport.
+Clinical booking and assistance retain their existing subject-authority checks.
+
+Photo galleries preserve image order and use the first available photo as the
+cover. Brand and publisher are separate. Monthly and annual prices are explicit
+amounts for each distributor and plan. The public viewer uses a seller website
+link for external purchases when the offer publishes one.
+
+The Demo reader accepts a local JSON:API collection with Product and Service
+resources in `data`. Their `attributes` contain the public offering projection.
+This document is a discovery fixture. For a CRM integration, the gateway must
+derive the publisher and tenant from the authenticated DIDComm context, validate
+the submitted Schema.org records, and update the publication version, DCAT
+dataset metadata and tenant index as one publication. Antifraud's gateway
+catalogue already derives the DCAT descriptor from published tenant resources.
+SOS GW has Schema.org and DCAT batch routes. CRM ingestion and the handoff from
+live controller publication to the public discovery feed still need a gateway
+integration.
+
 ## Explicitly outside the initial core
 
 - host registry, tenant admission and organization lifecycle policy (Antifraud

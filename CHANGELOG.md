@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Compose one public catalogue discovery controller over the Antifraud renderer
+  for Personal/Professional and Demo/Network. Inject transport, retain optional
+  ISO geography, ignore obsolete responses and expose explicit loading/error
+  states. Existing authorised service actions remain host-owned.
+
 ## 0.5.2
 
 - Show supported clinical records in an explicit collection without a Composition,
