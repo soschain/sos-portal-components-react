@@ -52,6 +52,19 @@ it('cleans up a failed connection and records cancellation without leaving media
   expect(f.room.disconnect).toHaveBeenCalledOnce();expect(f.stop).toHaveBeenCalledOnce()
   expect(f.endCall).toHaveBeenCalledWith(expect.objectContaining({outcome:'cancelled'}))
 })
+it.each(['start', 'accept'] as const)('keeps a video call connected with audio when the %s device camera is unavailable', async operation => {
+  const f = fixture()
+  f.room.localParticipant.setCameraEnabled.mockRejectedValueOnce(new DOMException('Camera unavailable', 'NotFoundError'))
+  const client = createLiveKitRealtimeCallClient(f.dependencies)
+  const input = { ...f.input, media: ['video'] as const }
+  const session = operation === 'start' ? await client.start(input) : await client.accept({ ...input, callId: safe.resourceUuid })
+  expect(f.issueSession).toHaveBeenCalledWith(expect.objectContaining({ media: ['audio', 'video'] }))
+  expect(f.room.localParticipant.setMicrophoneEnabled).toHaveBeenCalledWith(true)
+  expect(f.room.disconnect).not.toHaveBeenCalled()
+  expect(f.endCall).not.toHaveBeenCalled()
+  await session.end()
+  expect(f.room.disconnect).toHaveBeenCalledOnce()
+})
 it('does not create a call when the browser cannot load the media client',async()=>{
   const f=fixture()
   await expect(createLiveKitRealtimeCallClient({...f.dependencies,loadLiveKit:async()=>{throw new Error('media_unavailable')}}).start(f.input)).rejects.toThrow('media_unavailable')

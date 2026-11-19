@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { RealtimeCallMedia } from '../LiveKitRealtimeCallClient.js'
+import { BrowserCallVideoTile } from './BrowserCallVideoTile.js'
 
 /** Minimal host-injected session contract; no signaling or persistence implementation. */
 export type BrowserRealtimeCallSession = Readonly<{ callId: string; localStream: MediaStream; remoteStream: MediaStream; end(): Promise<void> }>
@@ -28,6 +29,7 @@ export function BrowserRealtimeCallPanel<Conversation>({
   client,
   incomingCallId,
   labels,
+  locale,
   media = ['audio', 'video'],
   onFailure,
 }: Readonly<{
@@ -35,19 +37,20 @@ export function BrowserRealtimeCallPanel<Conversation>({
   client: BrowserRealtimeCallPanelClient<Conversation>
   incomingCallId?: string
   labels: BrowserRealtimeCallPanelLabels
+  locale?: string
   media?: readonly RealtimeCallMedia[]
   onFailure?: (error: unknown) => void
 }>) {
   const [session, setSession] = useState<BrowserRealtimeCallSession>()
   const [status, setStatus] = useState('idle')
-  const localVideo = useRef<HTMLVideoElement>(null)
-  const remoteVideo = useRef<HTMLVideoElement>(null)
+  const remoteAudio = useRef<HTMLAudioElement>(null)
   const activeSession = useRef<BrowserRealtimeCallSession | undefined>(undefined)
 
   useEffect(() => {
     activeSession.current = session
-    if (localVideo.current) localVideo.current.srcObject = session?.localStream ?? null
-    if (remoteVideo.current) remoteVideo.current.srcObject = session?.remoteStream ?? null
+    const audio = remoteAudio.current
+    if (audio) audio.srcObject = session?.remoteStream ?? null
+    return () => { if (audio) audio.srcObject = null }
   }, [session])
 
   useEffect(() => () => {
@@ -81,8 +84,10 @@ export function BrowserRealtimeCallPanel<Conversation>({
     </button> : null}
     <p role="status">{labels[status as keyof BrowserRealtimeCallPanelLabels] || status}</p>
     {session ? <div className="uhcp-realtime-call-media">
-      <video ref={localVideo} data-testid="realtime-call-local-video" autoPlay muted playsInline />
-      <video ref={remoteVideo} data-testid="realtime-call-remote-video" autoPlay playsInline />
+      {media.includes('video') ? <div className="uhcp-call-video-grid">
+        <BrowserCallVideoTile stream={session.localStream} side="local" locale={locale} testId="realtime-call-local-video" />
+        <BrowserCallVideoTile stream={session.remoteStream} side="remote" locale={locale} testId="realtime-call-remote-video" />
+      </div> : <audio ref={remoteAudio} autoPlay />}
       <button type="button" onClick={() => void end()}>{labels.end}</button>
     </div> : null}
   </section>

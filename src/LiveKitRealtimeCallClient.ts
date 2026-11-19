@@ -20,7 +20,11 @@ export function createLiveKitRealtimeCallClient<Conversation>(dependencies: Read
   async function connect(input: LiveKitJoinSession<Conversation>): Promise<RealtimeCallSession> {
     // Establish browser capability before creating a persisted invitation.
     const liveKit=await loadLiveKit()
-    const grant=await dependencies.issueSession(input)
+    const wantsVideo = input.media.includes('video')
+    const media: readonly RealtimeCallMedia[] = wantsVideo && !input.media.includes('audio')
+      ? ['audio', ...input.media]
+      : input.media
+    const grant=await dependencies.issueSession({ ...input, media })
     const room = new liveKit.Room({ adaptiveStream: true, dynacast: true })
     const localStream = createMediaStream()
     const remoteStream = createMediaStream()
@@ -53,15 +57,29 @@ export function createLiveKitRealtimeCallClient<Conversation>(dependencies: Read
     room.on(liveKit.RoomEvent.Disconnected,remoteEnded)
     room.on(liveKit.RoomEvent.TrackSubscribed, track => {
       const mediaTrack = track.mediaStreamTrack
-      if (mediaTrack) remoteStream.addTrack(mediaTrack)
+      if (mediaTrack) {
+        remoteStream.addTrack(mediaTrack)
+        // Scripted MediaStream mutations do not emit track events.
+        remoteStream.dispatchEvent?.(new Event('addtrack'))
+      }
       resolveAnswered?.()
       resolveAnswered = undefined
+    })
+    room.on(liveKit.RoomEvent.TrackUnsubscribed, track => {
+      remoteStream.removeTrack(track.mediaStreamTrack)
+      remoteStream.dispatchEvent?.(new Event('removetrack'))
     })
     try{
       await room.connect(grant.serverUrl, grant.participantToken)
       connected=true
-      if (!closing&&input.media.includes('audio')) await room.localParticipant.setMicrophoneEnabled(true)
-      if (!closing&&input.media.includes('video')) await room.localParticipant.setCameraEnabled(true)
+      if (!closing && media.includes('audio')) await room.localParticipant.setMicrophoneEnabled(true)
+      if (!closing && wantsVideo) {
+        try {
+          await room.localParticipant.setCameraEnabled(true)
+        } catch {
+          // Camera capture is optional. The room keeps its audio and remote subscriptions.
+        }
+      }
       if(!closing)for (const publication of room.localParticipant.trackPublications.values()) {
         const mediaTrack = publication.track?.mediaStreamTrack
         if (mediaTrack) localStream.addTrack(mediaTrack)

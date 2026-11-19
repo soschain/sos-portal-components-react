@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.3
+
+- Keep video calls connected with audio when camera capture fails. Show a
+  camera-off tile independently for each participant and display video when
+  the other participant's stream arrives.
+
 ## 0.5.2
 
 - Show supported clinical records in an explicit collection without a Composition,
