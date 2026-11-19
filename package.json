@@ -106,11 +106,11 @@
     }
   },
   "dependencies": {
-    "antifraud-data-utils-ts": "0.4.2",
+    "antifraud-data-utils-ts": "0.4.3",
     "antifraud-common-components-react": "1.3.1",
-    "antifraud-portal-components-react": "0.4.2",
+    "antifraud-portal-components-react": "0.4.3",
     "fhir-data-utils-ts": "0.8.1",
-    "sos-data-utils-ts": "0.8.5",
+    "sos-data-utils-ts": "0.8.7",
     "terminology-components-react": "0.2.0"
   },
   "devDependencies": {
