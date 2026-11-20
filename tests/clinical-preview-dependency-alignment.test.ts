@@ -1,10 +1,10 @@
-// Flow contract: the shared native clinical preview resolves the reviewed FHIR 0.8.1 and SOS Data 0.8.7 owners from its own package boundary, rather than silently using older nested renderer contracts. This is dependency coherence, not browser or registry-release proof.
+// Flow contract: the shared native clinical preview resolves the reviewed FHIR 0.8.1 and SOS Data 0.8.8 owners from its own package boundary, rather than silently using older nested renderer contracts. This is dependency coherence, not browser or registry-release proof.
 import {readFileSync,existsSync} from 'node:fs'
 import {dirname,join} from 'node:path'
 import {createRequire} from 'node:module'
 import {expect,it} from 'vitest'
 
-const expected={'fhir-data-utils-ts':'0.8.1','sos-data-utils-ts':'0.8.7'} as const
+const expected={'fhir-data-utils-ts':'0.8.1','sos-data-utils-ts':'0.8.8'} as const
 const read=(file:string)=>JSON.parse(readFileSync(file,'utf8').replace(/^\uFEFF/u,''))
 
 it('declares the current clinical preview owners without older exact dependency pins',()=>{

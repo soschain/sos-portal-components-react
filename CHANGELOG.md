@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.6 - 2026-11-20
+
+- Pin the published catalogue editor and shared contracts used by product
+  and service discovery.
+
 ## 0.5.5 - 2026-11-20
 
 - Use Antifraud Portal 0.4.4 so catalogue cards preserve distinct listings

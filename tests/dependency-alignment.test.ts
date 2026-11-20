@@ -6,7 +6,7 @@ import {expect, it} from 'vitest'
 
 it('declares the reviewed SOS Data runtime dependency', () => {
   const manifest = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'))
-  expect(manifest.dependencies['sos-data-utils-ts']).toBe('0.8.7')
+  expect(manifest.dependencies['sos-data-utils-ts']).toBe('0.8.8')
 })
 
 it('resolves the active SOS Data contract catalog to the reviewed version', () => {
@@ -14,5 +14,5 @@ it('resolves the active SOS Data contract catalog to the reviewed version', () =
   let directory = dirname(resolve.resolve('sos-data-utils-ts'))
   while (!existsSync(join(directory, 'package.json'))) directory = dirname(directory)
   const active = JSON.parse(readFileSync(join(directory, 'package.json'), 'utf8'))
-  expect({name: active.name, version: active.version}).toEqual({name: 'sos-data-utils-ts', version: '0.8.7'})
+  expect({name: active.name, version: active.version}).toEqual({name: 'sos-data-utils-ts', version: '0.8.8'})
 })
