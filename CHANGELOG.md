@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.5.5 - 2026-11-20
+
+- Use Antifraud Portal 0.4.4 so catalogue cards preserve distinct listings
+  when a product and service or two publishers share an identifier.
 
 ## 0.5.4
 
