@@ -22,11 +22,12 @@ function mergeCapabilities(capabilities: readonly SelectedSubjectAreaCapability[
 }
 
 /** Capability-driven professional subject shell; selection never grants an action. */
-export function SelectedSubjectWorkspace({ subject, capabilities, copy, content = {}, initialArea = 'card' }: Readonly<{
+export function SelectedSubjectWorkspace({ subject, capabilities, copy, content = {}, createContent = {}, initialArea = 'card' }: Readonly<{
   subject: Readonly<{ id: string; display: string }>
   capabilities: readonly SelectedSubjectAreaCapability[]
   copy: SelectedSubjectWorkspaceCopy
   content?: Partial<Record<SelectedSubjectArea, ReactNode>>
+  createContent?: Partial<Record<SelectedSubjectArea, ReactNode>>
   initialArea?: 'card' | SelectedSubjectArea
 }>) {
   const capabilityByArea = useMemo(() => mergeCapabilities(capabilities), [capabilities])
@@ -45,6 +46,9 @@ export function SelectedSubjectWorkspace({ subject, capabilities, copy, content 
       <button type="button" role="tab" aria-selected={selectedArea === 'card'} onClick={() => setSelectedArea('card')}>{copy.card}</button>
       {visibleAreas.map((area) => <button type="button" role="tab" key={area} aria-selected={selectedArea === area} onClick={() => setSelectedArea(area)}>{labelFor(area)}</button>)}
     </div>
-    <div role="tabpanel">{selectedArea === 'card' ? <div><h3>{copy.summary}</h3><ul>{visibleAreas.map((area) => <li key={area}>{labelFor(area)}</li>)}</ul></div> : selectedCapability?.actions.includes('read') ? content[selectedArea] : null}</div>
+    <div role="tabpanel">{selectedArea === 'card' ? <div><h3>{copy.summary}</h3><ul>{visibleAreas.map((area) => <li key={area}>{labelFor(area)}</li>)}</ul></div> : <>
+      {selectedCapability?.actions.includes('read') && content[selectedArea]}
+      {selectedCapability?.actions.includes('create') && createContent[selectedArea]}
+    </>}</div>
   </section>
 }
