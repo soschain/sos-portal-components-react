@@ -1,4 +1,4 @@
-// Flow contract: a shared professional subject workspace renders only server-authorized areas; search counts never imply read access and browser-selected tabs never grant authority.
+// Flow contract: a shared professional subject workspace renders only server-authorized areas; search counts never imply read access and create content and read content are authorized independently.
 // @vitest-environment jsdom
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
@@ -11,10 +11,24 @@ describe('SelectedSubjectWorkspace', () => {
   afterEach(cleanup)
 
   it('renders read content only for an explicitly authorized area', () => {
-    render(<SelectedSubjectWorkspace subject={{ id: 'subject-1', display: 'Luna' }} capabilities={[{ area: 'health', actions: ['read'] }]} copy={copy} content={{ health: <p>Authorized health</p> }} />)
+    render(<SelectedSubjectWorkspace subject={{ id: 'subject-1', display: 'Luna' }} capabilities={[{ area: 'health', actions: ['read'] }]} copy={copy} content={{ health: <p>Authorized health</p> }} createContent={{ health: <p>Contribution editor</p> }} />)
     expect(screen.queryByRole('tab', { name: 'Communications' })).toBeNull()
     fireEvent.click(screen.getByRole('tab', { name: 'Health' }))
     expect(screen.getByText('Authorized health')).toBeTruthy()
+    expect(screen.queryByText('Contribution editor')).toBeNull()
+  })
+
+  it('shows contribution controls without showing read content', () => {
+    render(<SelectedSubjectWorkspace
+      subject={{ id: 'subject-1', display: 'Luna' }}
+      capabilities={[{ area: 'health', actions: ['create'] }]}
+      copy={copy}
+      content={{ health: <p>Private content</p> }}
+      createContent={{ health: <p>Contribution editor</p> }}
+    />)
+    fireEvent.click(screen.getByRole('tab', { name: 'Health' }))
+    expect(screen.getByText('Contribution editor')).toBeTruthy()
+    expect(screen.queryByText('Private content')).toBeNull()
   })
 
   it('shows a search count without exposing unread communication content', () => {

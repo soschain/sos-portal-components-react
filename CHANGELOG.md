@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Let a selected subject show contribution controls with create-only access
+  while keeping index content behind read access.
+
 ## 0.5.6 - 2026-11-20
 
 - Pin the published catalogue editor and shared contracts used by product
