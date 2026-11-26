@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { TerminologyCodePickerV2 } from 'terminology-components-react/code-picker-v2'
+import { TerminologyCodePickerV2, type TerminologyCodeSearchInputV2 } from 'terminology-components-react/code-picker-v2'
 import {
   composeFhirDateTimeFromLocalParts,
   splitFhirDateTimeForInput,
@@ -53,12 +53,28 @@ export function CodedConceptPropertyV2({ resourceType, textClaim, codeClaim, dis
   code: string
   display: string
   required?: boolean
-  copy: Readonly<{ searchTerminology: string; terminologyLoading: string; terminologyUnavailable: string; terminologyEmpty?: string; terminologySources: string; selectCandidate: string; clearCoding: string; canonicalCode: string; canonicalDisplay: string }>
+  copy: Readonly<{ searchTerminology: string; terminologyLoading: string; terminologyUnavailable: string; terminologyEmpty?: string; terminologyFailureMessage?: (failure: unknown) => string | undefined; terminologySources: string; selectCandidate: string; clearCoding: string; canonicalCode: string; canonicalDisplay: string }>
   searchTerminology?: (input: ClinicalTerminologySearch) => Promise<readonly ClinicalTerminologyCandidate[]>
   loadTerminologySources?: ClinicalTerminologySourceSearch
   onChange: (value: Readonly<{ text: string; code: string; display: string }>) => void
 }>) {
   const [speechRevision, setSpeechRevision] = useState(0)
+  const [searchFailureMessage, setSearchFailureMessage] = useState<string>()
+  const search = searchTerminology && (async (input: TerminologyCodeSearchInputV2) => {
+    setSearchFailureMessage(undefined)
+    try {
+      const candidates = await searchTerminology({
+        resourceType: input.resourceType, claim: input.param, language: input.language,
+        text: input.text, limit: input.limit,
+        ...(input.taxonomyId ? { taxonomyId: input.taxonomyId } : {}),
+        ...(input.sources ? { sources: input.sources } : {}),
+      })
+      return candidates.map(candidate => ({ ...candidate, text: candidate.text || candidate.display, language: input.language }))
+    } catch (failure) {
+      setSearchFailureMessage(copy.terminologyFailureMessage?.(failure))
+      throw failure
+    }
+  })
   return <TerminologyCodePickerV2
     key={speechRevision}
     resourceType={resourceType}
@@ -70,10 +86,13 @@ export function CodedConceptPropertyV2({ resourceType, textClaim, codeClaim, dis
     code={code}
     display={display}
     required={Boolean(required)}
-    copy={{ search: copy.searchTerminology, loading: copy.terminologyLoading, unavailable: copy.terminologyUnavailable, ...(copy.terminologyEmpty === undefined ? {} : { empty: copy.terminologyEmpty }), sources: copy.terminologySources, select: copy.selectCandidate, clear: copy.clearCoding, canonicalCode: copy.canonicalCode, canonicalDisplay: copy.canonicalDisplay }}
-    {...(searchTerminology ? { search: async input => (await searchTerminology({ resourceType: input.resourceType, claim: input.param, language: input.language, text: input.text, limit: input.limit, ...(input.taxonomyId ? { taxonomyId: input.taxonomyId } : {}), ...(input.sources ? { sources: input.sources } : {}) })).map(candidate => ({ ...candidate, text: candidate.text || candidate.display, language: input.language })) } : {})}
+    copy={{ search: copy.searchTerminology, loading: copy.terminologyLoading, unavailable: searchFailureMessage ?? copy.terminologyUnavailable, ...(copy.terminologyEmpty === undefined ? {} : { empty: copy.terminologyEmpty }), sources: copy.terminologySources, select: copy.selectCandidate, clear: copy.clearCoding, canonicalCode: copy.canonicalCode, canonicalDisplay: copy.canonicalDisplay }}
+    {...(search ? { search } : {})}
     {...(loadTerminologySources ? { loadSources: input => loadTerminologySources({ resourceType: input.resourceType, claim: input.param, language: input.language, ...(input.taxonomyId ? { taxonomyId: input.taxonomyId } : {}) }) } : {})}
-    onChange={onChange}
+    onChange={value => {
+      setSearchFailureMessage(undefined)
+      onChange(value)
+    }}
     headingAction={textClaim ? <ClinicalSpeechInputButton resourceType={resourceType} claim={textClaim} locale={locale} fieldLabel={label} onTranscript={transcript => { onChange({ text: transcript, code: '', display: '' }); setSpeechRevision(current => current + 1) }}/>: null}
     classNames={{ root: 'uhcp-clinical-property-v2 uhcp-coded-concept-property-v2', heading: 'uhcp-clinical-editor-field-heading', query: 'uhcp-coded-concept-query-v2', searchButton: 'uhcp-icon-button-v2', clearButton: 'uhcp-clear-code-v2', sources: 'uhcp-coding-sources-v2', selected: 'uhcp-selected-code-v2' }}
   />

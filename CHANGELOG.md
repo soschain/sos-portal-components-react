@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Allow the host to show a localized search failure in the clinical code picker,
+  independently of an empty candidate result or an unavailable service.
+- Display host-fixed claims as read-only in the shared V2 clinical document
+  editor and include their canonical values when staging a record.
+
 ## 0.5.7 - 2026-11-25
 
 - Let a selected subject show contribution controls with create-only access

@@ -122,6 +122,7 @@ export type ClinicalArtifactEditorCopy = Readonly<{
   close: string
   terminologyLoading: string
   terminologyUnavailable: string
+  terminologyFailureMessage?: (failure: unknown) => string | undefined
   terminologySources?: string
   readbackMissing: string
   pending?: string
@@ -235,7 +236,7 @@ export function ClinicalArtifactEditor({
   const [activeTerminologyClaim, setActiveTerminologyClaim] = useState<string>()
   const [candidates, setCandidates] = useState<readonly ClinicalTerminologyCandidate[]>([])
   const [terminologyBusy, setTerminologyBusy] = useState(false)
-  const [terminologyError, setTerminologyError] = useState(false)
+  const [terminologyError, setTerminologyError] = useState<string>()
   const [terminologySources, setTerminologySources] = useState<readonly ClinicalTerminologySource[]>([])
   const [selectedTerminologySources, setSelectedTerminologySources] = useState<readonly string[]>([])
   const [terminologySourcesClaim, setTerminologySourcesClaim] = useState('')
@@ -266,11 +267,11 @@ export function ClinicalArtifactEditor({
     if (!activeTerminologyClaim || !searchTerminology) return
     if (loadTerminologySources && terminologySourcesClaim !== activeTerminologyClaim) return
     const sourceText = claims[activeTerminologyClaim]?.trim() ?? ''
-    if (sourceText.length < 2) { setCandidates([]); return }
+    if (sourceText.length < 2) { setCandidates([]); setTerminologyError(undefined); return }
     const codeClaim = terminologyCodeClaim(request.resourceType, activeTerminologyClaim)
     let current = true
     setTerminologyBusy(true)
-    setTerminologyError(false)
+    setTerminologyError(undefined)
     const timer = window.setTimeout(() => {
       void searchTerminology({
         resourceType: request.resourceType,
@@ -282,14 +283,14 @@ export function ClinicalArtifactEditor({
         ...(selectedTerminologySources.length ? { sources: selectedTerminologySources } : {}),
       }).then((nextCandidates) => {
         if (current) setCandidates(nextCandidates)
-      }).catch(() => {
-        if (current) { setCandidates([]); setTerminologyError(true) }
+      }).catch((failure: unknown) => {
+        if (current) { setCandidates([]); setTerminologyError(copy.terminologyFailureMessage?.(failure) ?? copy.terminologyUnavailable) }
       }).finally(() => {
         if (current) setTerminologyBusy(false)
       })
     }, 250)
     return () => { current = false; window.clearTimeout(timer) }
-  }, [activeTerminologyClaim, claims, loadTerminologySources, locale, request.resourceType, searchTerminology, selectedTerminologySources, taxonomyId, terminologySourcesClaim])
+  }, [activeTerminologyClaim, claims, copy.terminologyFailureMessage, copy.terminologyUnavailable, loadTerminologySources, locale, request.resourceType, searchTerminology, selectedTerminologySources, taxonomyId, terminologySourcesClaim])
 
   async function submit() {
     setSaving(true)
@@ -400,7 +401,7 @@ export function ClinicalArtifactEditor({
               </fieldset>
             </details> : null}
             {terminologyBusy ? <small role="status">{copy.terminologyLoading}</small> : null}
-            {terminologyError ? <small role="alert">{copy.terminologyUnavailable}</small> : null}
+            {terminologyError ? <small role="alert">{terminologyError}</small> : null}
             {candidates.length ? <ul>{candidates.map((candidate) => <li key={`${candidate.system}|${candidate.code}`}><button type="button" onClick={() => {
               setClaims((current) => selectedCodingClaims(request.resourceType, claim, candidate, acceptedClaims, current))
               setCandidates([])
