@@ -49,7 +49,7 @@ export type ClinicalArtifactFieldV2 = Readonly<{
 
 export type ClinicalArtifactEditorCopyV2 = Readonly<{
   title: string; description: string; resourceType?: string; save: string; saving: string; cancel: string; close: string
-  terminologyLoading: string; terminologyUnavailable: string; terminologyEmpty?: string; terminologySources: string; readbackMissing: string
+  terminologyLoading: string; terminologyUnavailable: string; terminologyEmpty?: string; terminologyFailureMessage?: (failure: unknown) => string | undefined; terminologySources: string; readbackMissing: string
   addField: string; chooseField: string; addSelectedField: string; removeField: string
   searchTerminology: string; clearCoding: string; selectCandidate: string; canonicalCode: string; canonicalDisplay: string
   codingRequired: string
@@ -64,6 +64,7 @@ export type ClinicalArtifactEditorV2Props = Readonly<{
   fields: readonly ClinicalArtifactFieldV2[]
   initialVisibleClaims: readonly string[]
   initialClaims?: Readonly<Record<string, string>>
+  fixedClaims?: Readonly<Record<string, string>>
   locale?: string
   timeZone?: string
   taxonomyId?: string
@@ -80,9 +81,9 @@ export type ClinicalArtifactEditorV2Props = Readonly<{
 
 /** Progressive reusable V2 shell. Resource rules are supplied by a specialized editor. */
 /** @deprecated Use ClinicalBundleDraftEditorV2 for every new clinical authoring flow. */
-export function ClinicalArtifactEditorV2({ request, authoringContext, copy, fields, initialVisibleClaims, initialClaims = {}, locale = 'en', timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone, taxonomyId, fieldLabel, resourceTypeLabel, searchTerminology, loadTerminologySources, validate, buildRelatedEntries, saveArtifact, onCancel, onReadback }: ClinicalArtifactEditorV2Props) {
+export function ClinicalArtifactEditorV2({ request, authoringContext, copy, fields, initialVisibleClaims, initialClaims = {}, fixedClaims, locale = 'en', timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone, taxonomyId, fieldLabel, resourceTypeLabel, searchTerminology, loadTerminologySources, validate, buildRelatedEntries, saveArtifact, onCancel, onReadback }: ClinicalArtifactEditorV2Props) {
   const titleId = useId()
-  const [claims, setClaims] = useState<Record<string, string>>({ ...initialClaims, ...stringClaims(request.initialClaims) })
+  const [claims, setClaims] = useState<Record<string, string>>({ ...initialClaims, ...stringClaims(request.initialClaims), ...fixedClaims })
   const [visibleClaims, setVisibleClaims] = useState<readonly string[]>(() => [...new Set([...initialVisibleClaims, ...Object.keys(request.initialClaims ?? {}).filter(claim => fields.some(field => field.claim === claim))])])
   const [selectedOptional, setSelectedOptional] = useState('')
   const [saving, setSaving] = useState(false)
@@ -110,6 +111,7 @@ export function ClinicalArtifactEditorV2({ request, authoringContext, copy, fiel
         claims: {
           ...clinicalArtifactSubjectClaims(request.resourceType as FhirIpsClinicalArtifactType, authoringContext.subjectReference),
           ...cleanClaims(claims, fields),
+          ...fixedClaims,
         },
         attachments,
         relatedEntries: buildRelatedEntries?.(claims, draftId.current) ?? [],
@@ -130,11 +132,21 @@ export function ClinicalArtifactEditorV2({ request, authoringContext, copy, fiel
   return <ClinicalEditorLayer onDismiss={onCancel}><section className="uhcp-clinical-editor uhcp-clinical-editor-v2" role="dialog" aria-modal="true" aria-labelledby={titleId}>
     <header><div><h2 id={titleId}>{copy.title} {resourceTypeLabel || request.resourceType}</h2><p>{copy.description}</p></div><button type="button" aria-label={copy.close} onClick={onCancel}>×</button></header>
     <form onSubmit={event => { event.preventDefault(); void submit() }}>
-      {fields.filter(field => visibleClaims.includes(field.claim)).map(field => <div key={field.claim} className="uhcp-progressive-field-v2">
+      {fields.filter(field => visibleClaims.includes(field.claim)).map(field => {
+        const fixed = fixedClaims?.[field.claim]
+        if (fixed !== undefined) {
+          const label = fieldLabel(field.claim)
+          const display = field.options?.find(option => option.value === fixed)?.label ?? fixed
+          return <div key={field.claim} className="uhcp-progressive-field-v2">
+            <label className="uhcp-clinical-property-v2">{label}<output aria-label={label}>{display}</output></label>
+          </div>
+        }
+        return <div key={field.claim} className="uhcp-progressive-field-v2">
         {!field.required ? <button type="button" className="uhcp-remove-field-v2" aria-label={`${copy.removeField}: ${fieldLabel(field.claim)}`} onClick={() => { setVisibleClaims(current => current.filter(claim => claim !== field.claim)); if (field.kind === 'documents') setAttachments([]); setClaims(current => { const next = { ...current }; delete next[field.claim]; if (field.codeClaim) delete next[field.codeClaim]; if (field.displayClaim) delete next[field.displayClaim]; return next }) }}>×</button> : null}
         {field.kind === 'documents' ? <DocumentReferencesPropertyV2 copy={copy} attachments={attachments} onFiles={files => { void Promise.all(files.map(readClinicalAttachment)).then(next => setAttachments(current => [...current, ...next])).catch(reason => setError(reason instanceof Error ? reason.message : String(reason))) }} onRemove={id => setAttachments(current => current.filter(attachment => attachment.id !== id))}/>
           : <ClinicalProperty field={field} label={fieldLabel(field.claim)} resourceType={request.resourceType} value={claims[field.claim] ?? ''} claims={claims} locale={locale} timeZone={timeZone} {...(taxonomyId === undefined ? {} : { taxonomyId })} copy={copy} update={update} {...(searchTerminology === undefined ? {} : { searchTerminology })} {...(loadTerminologySources === undefined ? {} : { loadTerminologySources })}/>}
-      </div>)}
+      </div>
+      })}
       <OptionalFieldsV2 label={copy.addField} choose={copy.chooseField} add={copy.addSelectedField} options={optional} value={selectedOptional} onValueChange={setSelectedOptional} onAdd={() => { if (!selectedOptional) return; setVisibleClaims(current => [...current, selectedOptional]); setSelectedOptional('') }}/>
       {error ? <p className="uhcp-clinical-editor-error" role="alert">{error}</p> : null}
       <footer><button className="uhcp-clinical-editor-submit" type="submit" disabled={saving}>{saving ? copy.saving : copy.save}</button><button className="uhcp-clinical-editor-cancel" type="button" onClick={onCancel}>{copy.cancel}</button></footer>

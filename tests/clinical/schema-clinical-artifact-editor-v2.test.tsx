@@ -10,7 +10,7 @@
  */
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { FHIR_IPS_CLINICAL_ARTIFACT_SCHEMAS } from 'fhir-data-utils-ts'
+import { ConditionClaim, FHIR_IPS_CLINICAL_ARTIFACT_SCHEMAS } from 'fhir-data-utils-ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SchemaClinicalArtifactEditorV2 } from '../../src/clinical/SchemaClinicalArtifactEditorV2.js'
 
@@ -52,6 +52,27 @@ describe('SchemaClinicalArtifactEditorV2', () => {
     expect(screen.getByLabelText(conceptClaim)).toBeTruthy()
     expect(screen.getByLabelText(statusClaim).tagName).toBe('SELECT')
     cleanup()
+  })
+
+  it('shows a host-fixed clinical status as read-only', async () => {
+    const schema = FHIR_IPS_CLINICAL_ARTIFACT_SCHEMAS.Condition
+    const status = schema.initialClaims[ConditionClaim.ClinicalStatus]!
+    const saveArtifact = vi.fn(async () => ({ resourceType: 'Bundle', type: 'batch', data: [] }))
+    const fixedClaims = { [ConditionClaim.ClinicalStatus]: status }
+    render(<SchemaClinicalArtifactEditorV2
+      request={{ resourceType: schema.resourceType, sectionCode: schema.sectionCode, mode: 'create' }}
+      schema={schema}
+      authoringContext={{ ...context, attestationState: 'draft' }}
+      copy={copy}
+      fieldLabel={claim => claim}
+      fixedClaims={fixedClaims}
+      saveArtifact={saveArtifact}
+      onCancel={() => undefined}
+      onReadback={() => undefined}
+    />)
+    expect(screen.getByLabelText(ConditionClaim.ClinicalStatus).tagName).toBe('OUTPUT')
+    expect(screen.queryByRole('combobox', { name: ConditionClaim.ClinicalStatus })).toBeNull()
+    expect(screen.getByLabelText(ConditionClaim.ClinicalStatus).textContent).toMatch(/active/i)
   })
 
   it('names the translated resource in the title and reports a completed empty terminology search', async () => {

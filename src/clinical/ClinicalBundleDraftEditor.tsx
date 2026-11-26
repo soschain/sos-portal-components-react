@@ -29,6 +29,7 @@ export type ClinicalBundleDraftSchema = Readonly<{
   operationSchema: MultichannelOperationSchema
   sectionLabel: string
   artifactLabel: string
+  fixedClaims?: Readonly<Record<string, string>>
 }>
 
 export type ClinicalBundleDraft = Readonly<{
@@ -265,6 +266,7 @@ export function ClinicalBundleDraftEditor({
       request={editorRequest(editor)}
       authoringContext={authoringContext}
       copy={editorV2Copy}
+      {...(editor.schema.fixedClaims === undefined ? {} : { fixedClaims: editor.schema.fixedClaims })}
       locale={locale}
       {...(timeZone === undefined ? {} : { timeZone })}
       {...(taxonomyId === undefined ? {} : { taxonomyId })}
@@ -280,6 +282,7 @@ export function ClinicalBundleDraftEditor({
       schema={editor.schema.schema}
       authoringContext={authoringContext}
       copy={editorV2Copy}
+      {...(editor.schema.fixedClaims === undefined ? {} : { fixedClaims: editor.schema.fixedClaims })}
       locale={locale}
       {...(timeZone === undefined ? {} : { timeZone })}
       {...(taxonomyId === undefined ? {} : { taxonomyId })}
